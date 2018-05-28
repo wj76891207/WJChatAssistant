@@ -10,19 +10,21 @@ import Foundation
 import Speech
 import Accelerate
 
+extension WJSpeechRecognitionResult {
+    
+    init(withResult result: SFSpeechRecognitionResult) {
+        bestTranscription = result.bestTranscription.formattedString
+        transcriptions = result.transcriptions.map { $0.formattedString }
+        isFinal = result.isFinal
+    }
+}
+
 class DefaultSpeechRecognizer: WJSpeechRecognizerProtocol {
     
-    private var partialResultArrivalBlock: resultArrivalBlock?
-    private var finalResultArrivalBlock: resultArrivalBlock?
-    private var errorOccurBlock: ((Error) -> Void)?
+    weak var speechRecognizerDelegate: WJSpeechRecognizerDelegate?
     
-    func startListen(_ partialResultArrival: @escaping resultArrivalBlock,
-                     _ finalResultArrival: @escaping resultArrivalBlock,
-                     _ errorOccur: @escaping (Error) -> Void) {
-        
-        partialResultArrivalBlock = partialResultArrival
-        finalResultArrivalBlock = finalResultArrival
-        errorOccurBlock = errorOccur
+    func startListen(withDelegate delegate: WJSpeechRecognizerDelegate) {
+        speechRecognizerDelegate = delegate
     }
     
     func stopListen() {

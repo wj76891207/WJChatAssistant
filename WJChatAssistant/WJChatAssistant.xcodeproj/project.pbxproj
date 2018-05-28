@@ -7,6 +7,18 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		C9AEE41B20BB9D8F00FC24F7 /* WJCAViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9AEE41A20BB9D8F00FC24F7 /* WJCAViewController.swift */; };
+		C9AEE41D20BB9DA900FC24F7 /* WJCAViewControllerDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9AEE41C20BB9DA900FC24F7 /* WJCAViewControllerDelegate.swift */; };
+		C9AEE41F20BB9DBE00FC24F7 /* WJCAViewControllerDatasource.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9AEE41E20BB9DBE00FC24F7 /* WJCAViewControllerDatasource.swift */; };
+		C9AEE42120BB9E9200FC24F7 /* WJCAFunctionBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9AEE42020BB9E9200FC24F7 /* WJCAFunctionBar.swift */; };
+		C9AEE42320BB9F3C00FC24F7 /* WJCAFunctionBarDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9AEE42220BB9F3C00FC24F7 /* WJCAFunctionBarDelegate.swift */; };
+		C9AEE42520BB9F7B00FC24F7 /* WJCAFunctionBarDatasource.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9AEE42420BB9F7B00FC24F7 /* WJCAFunctionBarDatasource.swift */; };
+		C9AEE42820BBA4E900FC24F7 /* WJCAViewHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9AEE42720BBA4E900FC24F7 /* WJCAViewHelper.swift */; };
+		C9AEE42C20BBEBAE00FC24F7 /* WJSoundWaveView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9AEE42B20BBEBAE00FC24F7 /* WJSoundWaveView.swift */; };
+		C9AEE42E20BBEE4100FC24F7 /* WJCADialogViewLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9AEE42D20BBEE4100FC24F7 /* WJCADialogViewLayout.swift */; };
+		C9AEE43220BBF00900FC24F7 /* WJBubbleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9AEE43120BBF00900FC24F7 /* WJBubbleView.swift */; };
+		C9AEE43420BBF02D00FC24F7 /* WJTextBubbleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9AEE43320BBF02D00FC24F7 /* WJTextBubbleView.swift */; };
+		C9AEE43620BBF04100FC24F7 /* WJImageBubbleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9AEE43520BBF04100FC24F7 /* WJImageBubbleView.swift */; };
 		C9C9590720B7EF5C00E72454 /* WJChatAssistant.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C9C958FD20B7EF5C00E72454 /* WJChatAssistant.framework */; };
 		C9C9590C20B7EF5C00E72454 /* WJChatAssistantTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9C9590B20B7EF5C00E72454 /* WJChatAssistantTests.swift */; };
 		C9C9590E20B7EF5C00E72454 /* WJChatAssistant.h in Headers */ = {isa = PBXBuildFile; fileRef = C9C9590020B7EF5C00E72454 /* WJChatAssistant.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -78,13 +90,13 @@
 		C9C959D520B7FBA300E72454 /* libc++.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = C9C959D420B7FBA300E72454 /* libc++.tbd */; };
 		C9C959D720B7FBFD00E72454 /* libBaiduSpeechSDK.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C9C959D620B7FBFD00E72454 /* libBaiduSpeechSDK.a */; };
 		C9C959D920B7FC8D00E72454 /* WJChatAssistant.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9C959D820B7FC8D00E72454 /* WJChatAssistant.swift */; };
-		C9C959DC20B7FD7A00E72454 /* WJCAViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9C959DB20B7FD7A00E72454 /* WJCAViewController.swift */; };
+		C9C959DC20B7FD7A00E72454 /* WJCADialogView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9C959DB20B7FD7A00E72454 /* WJCADialogView.swift */; };
 		C9C959DF20B7FDD300E72454 /* DefaultSpeechRecognizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9C959DE20B7FDD300E72454 /* DefaultSpeechRecognizer.swift */; };
 		C9C959E120B800D300E72454 /* WJSpeechRecognizerProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9C959E020B800D300E72454 /* WJSpeechRecognizerProtocol.swift */; };
 		C9C959E320B800E600E72454 /* WJIntentRecognizerProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9C959E220B800E600E72454 /* WJIntentRecognizerProtocol.swift */; };
 		C9C959E520B8013100E72454 /* WJChatAssistantDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9C959E420B8013100E72454 /* WJChatAssistantDelegate.swift */; };
-		C9C959E720B801BF00E72454 /* WJCAViewControllerDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9C959E620B801BF00E72454 /* WJCAViewControllerDelegate.swift */; };
-		C9C959E920B8020A00E72454 /* WJCAViewControllerDatasource.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9C959E820B8020A00E72454 /* WJCAViewControllerDatasource.swift */; };
+		C9C959E720B801BF00E72454 /* WJCADialogViewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9C959E620B801BF00E72454 /* WJCADialogViewDelegate.swift */; };
+		C9C959E920B8020A00E72454 /* WJCADialogViewDatasource.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9C959E820B8020A00E72454 /* WJCADialogViewDatasource.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -127,6 +139,18 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		C9AEE41A20BB9D8F00FC24F7 /* WJCAViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WJCAViewController.swift; sourceTree = "<group>"; };
+		C9AEE41C20BB9DA900FC24F7 /* WJCAViewControllerDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WJCAViewControllerDelegate.swift; sourceTree = "<group>"; };
+		C9AEE41E20BB9DBE00FC24F7 /* WJCAViewControllerDatasource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WJCAViewControllerDatasource.swift; sourceTree = "<group>"; };
+		C9AEE42020BB9E9200FC24F7 /* WJCAFunctionBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WJCAFunctionBar.swift; sourceTree = "<group>"; };
+		C9AEE42220BB9F3C00FC24F7 /* WJCAFunctionBarDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WJCAFunctionBarDelegate.swift; sourceTree = "<group>"; };
+		C9AEE42420BB9F7B00FC24F7 /* WJCAFunctionBarDatasource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WJCAFunctionBarDatasource.swift; sourceTree = "<group>"; };
+		C9AEE42720BBA4E900FC24F7 /* WJCAViewHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WJCAViewHelper.swift; sourceTree = "<group>"; };
+		C9AEE42B20BBEBAE00FC24F7 /* WJSoundWaveView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WJSoundWaveView.swift; sourceTree = "<group>"; };
+		C9AEE42D20BBEE4100FC24F7 /* WJCADialogViewLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WJCADialogViewLayout.swift; sourceTree = "<group>"; };
+		C9AEE43120BBF00900FC24F7 /* WJBubbleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WJBubbleView.swift; sourceTree = "<group>"; };
+		C9AEE43320BBF02D00FC24F7 /* WJTextBubbleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WJTextBubbleView.swift; sourceTree = "<group>"; };
+		C9AEE43520BBF04100FC24F7 /* WJImageBubbleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WJImageBubbleView.swift; sourceTree = "<group>"; };
 		C9C958FD20B7EF5C00E72454 /* WJChatAssistant.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = WJChatAssistant.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		C9C9590020B7EF5C00E72454 /* WJChatAssistant.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WJChatAssistant.h; sourceTree = "<group>"; };
 		C9C9590120B7EF5C00E72454 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -201,13 +225,13 @@
 		C9C959D420B7FBA300E72454 /* libc++.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = "libc++.tbd"; path = "usr/lib/libc++.tbd"; sourceTree = SDKROOT; };
 		C9C959D620B7FBFD00E72454 /* libBaiduSpeechSDK.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libBaiduSpeechSDK.a; path = BDSpeechRecognizer/BDSClientLib/libBaiduSpeechSDK.a; sourceTree = "<group>"; };
 		C9C959D820B7FC8D00E72454 /* WJChatAssistant.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WJChatAssistant.swift; sourceTree = "<group>"; };
-		C9C959DB20B7FD7A00E72454 /* WJCAViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WJCAViewController.swift; sourceTree = "<group>"; };
+		C9C959DB20B7FD7A00E72454 /* WJCADialogView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WJCADialogView.swift; sourceTree = "<group>"; };
 		C9C959DE20B7FDD300E72454 /* DefaultSpeechRecognizer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefaultSpeechRecognizer.swift; sourceTree = "<group>"; };
 		C9C959E020B800D300E72454 /* WJSpeechRecognizerProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WJSpeechRecognizerProtocol.swift; sourceTree = "<group>"; };
 		C9C959E220B800E600E72454 /* WJIntentRecognizerProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WJIntentRecognizerProtocol.swift; sourceTree = "<group>"; };
 		C9C959E420B8013100E72454 /* WJChatAssistantDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WJChatAssistantDelegate.swift; sourceTree = "<group>"; };
-		C9C959E620B801BF00E72454 /* WJCAViewControllerDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WJCAViewControllerDelegate.swift; sourceTree = "<group>"; };
-		C9C959E820B8020A00E72454 /* WJCAViewControllerDatasource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WJCAViewControllerDatasource.swift; sourceTree = "<group>"; };
+		C9C959E620B801BF00E72454 /* WJCADialogViewDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WJCADialogViewDelegate.swift; sourceTree = "<group>"; };
+		C9C959E820B8020A00E72454 /* WJCADialogViewDatasource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WJCADialogViewDatasource.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -256,6 +280,39 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		C9AEE41820BB9D5B00FC24F7 /* FunctionBar */ = {
+			isa = PBXGroup;
+			children = (
+				C9AEE42020BB9E9200FC24F7 /* WJCAFunctionBar.swift */,
+				C9AEE42220BB9F3C00FC24F7 /* WJCAFunctionBarDelegate.swift */,
+				C9AEE42420BB9F7B00FC24F7 /* WJCAFunctionBarDatasource.swift */,
+			);
+			path = FunctionBar;
+			sourceTree = "<group>";
+		};
+		C9AEE41920BB9D6600FC24F7 /* DialogView */ = {
+			isa = PBXGroup;
+			children = (
+				C9C959DB20B7FD7A00E72454 /* WJCADialogView.swift */,
+				C9AEE42D20BBEE4100FC24F7 /* WJCADialogViewLayout.swift */,
+				C9C959E620B801BF00E72454 /* WJCADialogViewDelegate.swift */,
+				C9C959E820B8020A00E72454 /* WJCADialogViewDatasource.swift */,
+				C9AEE42A20BBEAAC00FC24F7 /* Component */,
+			);
+			path = DialogView;
+			sourceTree = "<group>";
+		};
+		C9AEE42A20BBEAAC00FC24F7 /* Component */ = {
+			isa = PBXGroup;
+			children = (
+				C9AEE42B20BBEBAE00FC24F7 /* WJSoundWaveView.swift */,
+				C9AEE43120BBF00900FC24F7 /* WJBubbleView.swift */,
+				C9AEE43320BBF02D00FC24F7 /* WJTextBubbleView.swift */,
+				C9AEE43520BBF04100FC24F7 /* WJImageBubbleView.swift */,
+			);
+			path = Component;
+			sourceTree = "<group>";
+		};
 		C9C958F320B7EF5C00E72454 = {
 			isa = PBXGroup;
 			children = (
@@ -472,9 +529,12 @@
 		C9C959DA20B7FCEE00E72454 /* ConvenientUI */ = {
 			isa = PBXGroup;
 			children = (
-				C9C959DB20B7FD7A00E72454 /* WJCAViewController.swift */,
-				C9C959E620B801BF00E72454 /* WJCAViewControllerDelegate.swift */,
-				C9C959E820B8020A00E72454 /* WJCAViewControllerDatasource.swift */,
+				C9AEE41A20BB9D8F00FC24F7 /* WJCAViewController.swift */,
+				C9AEE41C20BB9DA900FC24F7 /* WJCAViewControllerDelegate.swift */,
+				C9AEE41E20BB9DBE00FC24F7 /* WJCAViewControllerDatasource.swift */,
+				C9AEE42720BBA4E900FC24F7 /* WJCAViewHelper.swift */,
+				C9AEE41920BB9D6600FC24F7 /* DialogView */,
+				C9AEE41820BB9D5B00FC24F7 /* FunctionBar */,
 			);
 			path = ConvenientUI;
 			sourceTree = "<group>";
@@ -717,14 +777,26 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C9AEE42120BB9E9200FC24F7 /* WJCAFunctionBar.swift in Sources */,
 				C9C959E320B800E600E72454 /* WJIntentRecognizerProtocol.swift in Sources */,
+				C9AEE42E20BBEE4100FC24F7 /* WJCADialogViewLayout.swift in Sources */,
 				C9C959E120B800D300E72454 /* WJSpeechRecognizerProtocol.swift in Sources */,
+				C9AEE41B20BB9D8F00FC24F7 /* WJCAViewController.swift in Sources */,
 				C9C959E520B8013100E72454 /* WJChatAssistantDelegate.swift in Sources */,
-				C9C959DC20B7FD7A00E72454 /* WJCAViewController.swift in Sources */,
-				C9C959E920B8020A00E72454 /* WJCAViewControllerDatasource.swift in Sources */,
+				C9C959DC20B7FD7A00E72454 /* WJCADialogView.swift in Sources */,
+				C9AEE42320BB9F3C00FC24F7 /* WJCAFunctionBarDelegate.swift in Sources */,
+				C9AEE42520BB9F7B00FC24F7 /* WJCAFunctionBarDatasource.swift in Sources */,
+				C9AEE43620BBF04100FC24F7 /* WJImageBubbleView.swift in Sources */,
+				C9AEE42C20BBEBAE00FC24F7 /* WJSoundWaveView.swift in Sources */,
+				C9AEE41F20BB9DBE00FC24F7 /* WJCAViewControllerDatasource.swift in Sources */,
+				C9AEE42820BBA4E900FC24F7 /* WJCAViewHelper.swift in Sources */,
+				C9C959E920B8020A00E72454 /* WJCADialogViewDatasource.swift in Sources */,
+				C9AEE43420BBF02D00FC24F7 /* WJTextBubbleView.swift in Sources */,
 				C9C959DF20B7FDD300E72454 /* DefaultSpeechRecognizer.swift in Sources */,
 				C9C959D920B7FC8D00E72454 /* WJChatAssistant.swift in Sources */,
-				C9C959E720B801BF00E72454 /* WJCAViewControllerDelegate.swift in Sources */,
+				C9AEE43220BBF00900FC24F7 /* WJBubbleView.swift in Sources */,
+				C9AEE41D20BB9DA900FC24F7 /* WJCAViewControllerDelegate.swift in Sources */,
+				C9C959E720B801BF00E72454 /* WJCADialogViewDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

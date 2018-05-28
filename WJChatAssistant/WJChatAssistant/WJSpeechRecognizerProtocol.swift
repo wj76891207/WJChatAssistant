@@ -8,28 +8,44 @@
 
 import Foundation
 
-public struct WJSpeechRecordData {
+public struct WJSpeechRecognitionResult {
     
-    public let data: Data
-    public let peakPower: Float
-    public let averagePower: Float
-    
-    init(withData data: Data) {
-        self.data = data
-        peakPower = 0
-        averagePower = 0
-    }
+    public let bestTranscription: String
+    public let transcriptions: [String]
+    public let isFinal: Bool
 }
 
 public protocol WJSpeechRecognizerProtocol {
     
-    typealias resultArrivalBlock = (_ result: WJSpeechRecordData) -> Void
+    weak var speechRecognizerDelegate: WJSpeechRecognizerDelegate? { get }
     
-    func startListen(_ partialResultArrival: @escaping resultArrivalBlock,
-                     _ finalResultArrival: @escaping resultArrivalBlock,
-                     _ errorOccur: @escaping (Error) -> Void)
+    func startListen(withDelegate delegate: WJSpeechRecognizerDelegate)
     
     func stopListen()
     
     func cancelListen()
+}
+
+
+public protocol WJSpeechRecognizerDelegate: AnyObject {
+    
+    // MARK: Optional
+    func wjSpeechRecognizerUpdateVoicePower(_ averagePower: Float?, peakPower: Float?)
+    
+    func wjSpeechRecognizerOccurError(_ error: NSError)
+    
+    
+    // MARK: Required
+    func wjSpeechRecognizerUpdateRecognitionResult(_ result: WJSpeechRecognitionResult)
+}
+
+extension WJSpeechRecognizerDelegate {
+    
+    func wjSpeechRecognizerUpdateVoicePower(_ averagePower: Float?, peakPower: Float?) {
+        // default do nothing
+    }
+    
+    func wjSpeechRecognizerOccurError(_ error: NSError) {
+        // default do nothing
+    }
 }

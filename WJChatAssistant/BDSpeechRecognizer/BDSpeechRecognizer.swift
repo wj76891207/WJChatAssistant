@@ -7,18 +7,21 @@
 //
 
 import Foundation
+import WJChatAssistant
 
 public class WJBDSpeechManager: NSObject, BDSClientASRDelegate {
     
-    static let share = WJBDSpeechManager()
+    public static let share = WJBDSpeechManager()
     
-    lazy var asrEventManager: BDSEventManager? = {
+    private lazy var asrEventManager: BDSEventManager? = {
         let manager = BDSEventManager.createEventManager(withName: BDS_ASR_NAME)
         manager?.setDelegate(self)
         return manager
     }()
     
-    func setupBDSClient(withAppID appID: String, appKey: String, secretKey: String) {
+    public weak var speechRecognizerDelegate: WJSpeechRecognizerDelegate? = nil
+    
+    public func setupBDSClient(withAppID appID: String, appKey: String, secretKey: String) {
         
         //配置API_KEY 和 SECRET_KEY 和 APP_ID
         asrEventManager?.setParameter([appKey, secretKey], forKey: BDS_ASR_API_SECRET_KEYS)
@@ -42,6 +45,7 @@ public class WJBDSpeechManager: NSObject, BDSClientASRDelegate {
         case EVoiceRecognitionClientWorkStatusCancel:                 // 用户取消
             break
         case EVoiceRecognitionClientWorkStatusError:                  // 发生错误
+            speechRecognizerDelegate?.wjSpeechRecognizerOccurError(NSError(domain: "", code: 0, userInfo: nil))
             break
         case EVoiceRecognitionClientWorkStatusRecorderEnd:            // 录音结束
             break
@@ -50,8 +54,10 @@ public class WJBDSpeechManager: NSObject, BDSClientASRDelegate {
         case EVoiceRecognitionClientWorkStatusNewRecordData:          // 录音数据回调
             break
         case EVoiceRecognitionClientWorkStatusMeterLevel:             // 当前音量回调
+            speechRecognizerDelegate?.wjSpeechRecognizerUpdateVoicePower(aObj as? Float, peakPower: nil)
             break
         case EVoiceRecognitionClientWorkStatusFlushData:              // 获取到部分数据回调
+            speechRecognizerDelegate?.wjSpeechRecognizerUpdateRecognitionResult(WJSpeechRecognitionResult(withBDFlushData: aObj))
             break
         case EVoiceRecognitionClientWorkStatusFinish:                 // 语音识别功能完成，服务器返回正确结果
             break
@@ -70,6 +76,48 @@ public class WJBDSpeechManager: NSObject, BDSClientASRDelegate {
     }
 }
 
-extension WJBDSpeechManager {
+extension WJBDSpeechManager: WJSpeechRecognizerProtocol {
     
+    public func startListen(withDelegate delegate: WJSpeechRecognizerDelegate) {
+        speechRecognizerDelegate = delegate
+        asrEventManager?.sendCommand(BDS_ASR_CMD_START)
+    }
+    
+    public func stopListen() {
+        
+        asrEventManager?.sendCommand(BDS_ASR_CMD_STOP)
+    }
+    
+    public func cancelListen() {
+         asrEventManager?.sendCommand(BDS_ASR_CMD_CANCEL)
+    }
+}
+
+extension WJSpeechRecognitionResult {
+    
+    init(withBDFlushData data: Any, isFinal: Bool = false) {
+        if
+            let dicData = data as? [String: Any],
+            let results_recognition = dicData["results_recognition"] as? [String],
+            results_recognition.count > 0,
+            let origin_result = dicData["origin_result"] as? [String: Any],
+            let result = origin_result["result"] as? [String: [String]],
+            let word = result["word"] {
+            
+            bestTranscription = results_recognition[0]
+            
+            var candidate = word
+            if let uncertain_word = result["uncertain_word"] {
+                candidate.append(contentsOf: uncertain_word)
+            }
+            transcriptions = candidate
+            
+        }
+        else {
+            bestTranscription = ""
+            transcriptions = []
+        }
+        
+        self.isFinal = isFinal
+    }
 }

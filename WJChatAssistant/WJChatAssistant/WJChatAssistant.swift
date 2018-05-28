@@ -10,8 +10,6 @@ import Foundation
 
 public class WJChatAssistant {
     
-    
-    
     /// 通常来讲同时只会有一个对话场景，所以只用该单例来访问即可
     public static let `default` = WJChatAssistant()
     
@@ -34,22 +32,32 @@ public class WJChatAssistant {
     // MARK: - Public Functions
     
     public func startListen() {
-        
+        speechRecognizer.startListen(withDelegate: self)
     }
     
-    public func endListen() {
-        
+    public func stopListen() {
+        speechRecognizer.stopListen()
     }
     
     public func cancelListen() {
+        speechRecognizer.cancelListen()
+    }
+    
+}
+
+extension WJChatAssistant: WJSpeechRecognizerDelegate {
+    
+    public func wjSpeechRecognizerUpdateVoicePower(_ averagePower: Float?, peakPower: Float?) {
         
     }
     
-//    public func recognizeVoice() {
-//
-//    }
-
-//    public func recognizeText() {
-//
-//    }
+    public func wjSpeechRecognizerOccurError(_ error: NSError) {
+        
+    }
+    
+    public func wjSpeechRecognizerUpdateRecognitionResult(_ result: WJSpeechRecognitionResult) {
+        
+    }
 }
+
+

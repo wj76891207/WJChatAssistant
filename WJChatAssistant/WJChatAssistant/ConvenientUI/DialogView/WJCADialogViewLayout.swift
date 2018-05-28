@@ -1,5 +1,5 @@
 //
-//  WJCAViewControllerDelegate.swift
+//  WJCADialogViewLayout.swift
 //  WJChatAssistant
 //
 //  Created by wangjian on 28/05/2018.
@@ -8,6 +8,6 @@
 
 import Foundation
 
-public protocol WJCAViewControllerDelegate: AnyObject {
+class WJCADialogViewLayout: UICollectionViewLayout {
     
 }
