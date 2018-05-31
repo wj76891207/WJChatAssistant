@@ -140,7 +140,7 @@ class WJCADialogMessageView: UICollectionViewCell, WJCADialogMessageBubbleViewPr
 
 class WJCADialogTextMessageView: WJCADialogMessageView {
     
-    private var textBubbleView: WJTextBubbleView { return bubbleView as! WJTextBubbleView }
+    fileprivate var textBubbleView: WJTextBubbleView { return bubbleView as! WJTextBubbleView }
     
     override init(frame: CGRect) {
 
@@ -159,7 +159,7 @@ class WJCADialogTextMessageView: WJCADialogMessageView {
         textBubbleView.text = msg.content as? String
     }
     
-    override static func size(fitIn constraintSize: CGSize, withMessage msg: WJCADialogMessage) -> CGSize {
+    override class func size(fitIn constraintSize: CGSize, withMessage msg: WJCADialogMessage) -> CGSize {
         let showAvatar = msg.position != .center
         
         let bubbleFitSize: CGSize
@@ -218,6 +218,39 @@ class WJCADialogImageMessageView: WJCADialogMessageView {
         
         return CGSize(width: showAvatar ? bubbleFitSize.width+avatarSize+marginBetweenAvatarAndBubble : bubbleFitSize.width,
                       height: bubbleFitSize.height)
+    }
+}
+
+class WJCADialogOptionsMessageView: WJCADialogTextMessageView {
+    
+    private var optionsButtonView = WJButtonGroup()
+    
+    override func didInitialized() {
+        super.didInitialized()
+        addSubview(optionsButtonView)
+    }
+    
+    override func update(withMessage msg: WJCADialogMessage) {
+        super.update(withMessage: msg)
+        
+        if let content = msg.content as? WJCADialogOptionMessageContent {
+            textBubbleView.text = content.title
+            optionsButtonView.titles = content.options
+        }
+    }
+    
+    override static func size(fitIn constraintSize: CGSize, withMessage msg: WJCADialogMessage) -> CGSize {
+        guard let optionContent = msg.content as? WJCADialogOptionMessageContent else {
+            return super.size(fitIn: constraintSize, withMessage: msg)
+        }
+
+        let showAvatar = msg.position != .center
+        var tmpMsg = msg
+        tmpMsg.content = optionContent.title
+        var size = super.size(fitIn: constraintSize, withMessage: tmpMsg)
+        
+        
+        return size
     }
 }
 

@@ -63,8 +63,13 @@ extension WJCADialogView: UICollectionViewDataSource {
             msgView.update(withMessage: msg)
         }
         
+        let invalidationContext = UICollectionViewLayoutInvalidationContext.init()
+        invalidationContext.invalidateItems(at: [indexPath])
+        layout.invalidateLayout(with: invalidationContext)
         return cell
     }
+    
+   
     
 }
 

@@ -41,23 +41,23 @@ public class WJCAViewController: UIViewController {
 //        view.addSubview(testView)
         
         
-        let titles1 = ["YES", "NO"]
-        let titles2 = ["我比较短", "我是一个很长很长很长很长很长很长很长很长很长的按钮", "短", "一般般吧", "又是一个比较长的按钮噢噢噢噢", "uuuuu", "222222"]
-        let testTitles = [titles1, titles2]
+//        let titles1 = ["YES", "NO"]
+//        let titles2 = ["我比较短", "我是一个很长很长很长很长很长很长很长很长很长的按钮", "短", "一般般吧", "又是一个比较长的按钮噢噢噢噢", "uuuuu", "222222"]
+//        let testTitles = [titles1, titles2]
+//        
+//        var curY: CGFloat = 100
+//        for titles in testTitles {
+//            let testOptionsView = WJButtonGroup(frame: CGRect(x: 30, y: curY, width: 300, height: 100))
+//            testOptionsView.titles = titles
+//            
+//            testOptionsView.sizeToFit()
+//            view.addSubview(testOptionsView)
+//            
+//            curY += testOptionsView.bounds.height + 20
+//        }
         
-        var curY: CGFloat = 100
-        for titles in testTitles {
-            let testOptionsView = WJButtonGroup(frame: CGRect(x: 30, y: curY, width: 300, height: 100))
-            testOptionsView.titles = titles
-            
-            testOptionsView.sizeToFit()
-            view.addSubview(testOptionsView)
-            
-            curY += testOptionsView.bounds.height + 20
-        }
         
-        
-//        view.addSubview(dialogView)
+        view.addSubview(dialogView)
     }
 }
 
