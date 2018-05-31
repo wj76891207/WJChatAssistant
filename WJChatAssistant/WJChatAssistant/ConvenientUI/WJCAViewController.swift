@@ -15,9 +15,9 @@ public class WJCAViewController: UIViewController {
     public weak var datasource: WJCAViewControllerDatasource? = nil
     
     private lazy var dialogView: WJCADialogView = {
-        let view = WJCADialogView()
+        let view = WJCADialogView(frame: self.view.bounds)
         view.delegate = self
-        view.datasource = self
+        view.dataSource = self
         return view
     }()
     
@@ -35,17 +35,29 @@ public class WJCAViewController: UIViewController {
         chatAssistant.delegate = self
         view.backgroundColor = .white
         
-        let bubbleView = WJBubbleView(frame: CGRect.init(x: 40, y: 100, width: 200, height: 40), position: .left)
-        bubbleView.backgroundColor = UIColor.blue
-        view.addSubview(bubbleView)
         
-//        let bubbleView1 = WJBubbleView(frame: CGRect.init(x: 40, y: 150, width: 200, height: 40), position: .center)
-//        bubbleView1.backgroundColor = UIColor.gray
-//        view.addSubview(bubbleView1)
-//        
-//        let bubbleView2 = WJBubbleView(frame: CGRect.init(x: 40, y: 200, width: 200, height: 40), position: .right)
-//        bubbleView2.backgroundColor = UIColor.red
-//        view.addSubview(bubbleView2)
+//        let testView = WJMarbleLoadingView(frame: CGRect.init(x: 100, y: 100, width: 60, height: 40), number: 3)
+//        testView.layer.cornerRadius = 15
+//        view.addSubview(testView)
+        
+        
+        let titles1 = ["YES", "NO"]
+        let titles2 = ["我比较短", "我是一个很长很长很长很长很长很长很长很长很长的按钮", "短", "一般般吧", "又是一个比较长的按钮噢噢噢噢", "uuuuu", "222222"]
+        let testTitles = [titles1, titles2]
+        
+        var curY: CGFloat = 100
+        for titles in testTitles {
+            let testOptionsView = WJButtonGroup(frame: CGRect(x: 30, y: curY, width: 300, height: 100))
+            testOptionsView.titles = titles
+            
+            testOptionsView.sizeToFit()
+            view.addSubview(testOptionsView)
+            
+            curY += testOptionsView.bounds.height + 20
+        }
+        
+        
+//        view.addSubview(dialogView)
     }
 }
 
@@ -55,8 +67,77 @@ extension WJCAViewController: WJChatAssistantDelegate {
 }
 
 // MARK: - WJCADialogViewDatasource
-extension WJCAViewController: WJCADialogViewDatasource {
+extension WJCAViewController: WJCADialogViewDataSource {
     
+    public func numberOfMessage(inDialogView dialogView: WJCADialogView) -> Int {
+        return 5
+    }
+    
+    public func dialogView(_ dialogView: WJCADialogView, messageAtIndex index: Int) -> WJCADialogMessage {
+        
+        let messages: [WJCADialogMessage] = [
+            {
+                var msg = WJCADialogMessage()
+                msg.content = "Hi，小璇"
+                msg.speaker = .user
+                return msg
+            }(),
+            {
+                var msg = WJCADialogMessage()
+                msg.content = "我在呢，有什么事吗？"
+                msg.speaker = .bot
+                return msg
+            }(),
+            {
+                var msg = WJCADialogMessage()
+                msg.content = "没什么事儿，就是想找你闲聊一下，你现在有时间么？"
+                msg.speaker = .user
+                return msg
+            }(),
+            {
+                var msg = WJCADialogMessage()
+                msg.content = ""
+                msg.speaker = .bot
+                msg.status = .processing
+                return msg
+            }(),
+            {
+                var msg = WJCADialogMessage()
+                msg.contentType = .image
+                msg.content = #imageLiteral(resourceName: "test_img1")
+                msg.speaker = .bot
+                return msg
+            }(),
+            {
+                var msg = WJCADialogMessage()
+                msg.contentType = .image
+                msg.content = #imageLiteral(resourceName: "test_img2")
+                msg.speaker = .user
+                return msg
+            }(),
+            {
+                var msg = WJCADialogMessage()
+                msg.contentType = .options
+                msg.content = {
+                    var content = WJCADialogOptionMessageContent()
+                    content.title = "我找到了以下选项"
+                    content.options = ["我比较短", "我是一个很长很长很长很长很长很长很长很长很长的按钮", "短", "一般般吧", "又是一个比较长的按钮噢噢噢噢", "uuuuu", "222222"]
+                    return content
+                }()
+                msg.speaker = .bot
+                return msg
+            }(),
+            {
+                var msg = WJCADialogMessage()
+                msg.content = ""
+                msg.speaker = .bot
+                msg.status = .processing
+                return msg
+            }()
+        ]
+        
+        return messages[index]
+    }
 }
 
 // MARK: - WJCADialogViewDelagate
