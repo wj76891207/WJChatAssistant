@@ -39,35 +39,43 @@ class WJTextBubbleView: WJBubbleView {
         }
     }
     
-    override class func contentEdgeInsets(withPosition position: Position, cornerRadiu: CGFloat = 15, hookWidth: CGFloat = 7.5) -> UIEdgeInsets {
+    override var contentEdgeInsets: UIEdgeInsets {
         return UIEdgeInsets(top: cornerRadiu*2/3,
                             left: (position == .left ? hookWidth : 0) + cornerRadiu*2/3,
                             bottom: cornerRadiu*2/3,
                             right: (position == .right ? hookWidth : 0) + cornerRadiu*2/3)
     }
 
-    /// 根据内容以及view的相关属性，计算合适的显示大小
-    class func fitSize(withText text: String?,
-                       font: UIFont,
-                       position: Position,
-                       constraintSize: CGSize? = nil,
-                       cornerRadiu: CGFloat = 15,
-                       hookWidth: CGFloat = 7.5) -> CGSize {
-        
-        let insets = contentEdgeInsets(withPosition: position, cornerRadiu: cornerRadiu, hookWidth: hookWidth)
-        var contentConstraintSize = suggestedMaxSize
-        if let constraintSize = constraintSize {
-            contentConstraintSize.width = constraintSize.width - insets.horizontal
-            contentConstraintSize.height = constraintSize.height - insets.vertival
+//    /// 根据内容以及view的相关属性，计算合适的显示大小
+//    class func fitSize(withText text: String?,
+//                       font: UIFont,
+//                       position: Position,
+//                       constraintSize: CGSize? = nil,
+//                       cornerRadiu: CGFloat = 15,
+//                       hookWidth: CGFloat = 7.5) -> CGSize {
+//        
+//        let insets = contentEdgeInsets(withPosition: position, cornerRadiu: cornerRadiu, hookWidth: hookWidth)
+//        var contentConstraintSize = suggestedMaxSize
+//        if let constraintSize = constraintSize {
+//            contentConstraintSize.width = constraintSize.width - insets.horizontal
+//            contentConstraintSize.height = constraintSize.height - insets.vertival
+//        }
+//        
+//        let strSize = text?.size(widthConstrainedSize: contentConstraintSize, font: font) ?? .zero
+//        let bubbleSize = CGSize(width: (strSize.width+insets.horizontal).flat, height: (strSize.height+insets.vertival).flat)
+//        return bubbleSize
+//    }
+    
+    override func sizeThatFits(_ size: CGSize) -> CGSize {
+        if isProcessing {
+            return super.sizeThatFits(size)
         }
         
+        let insets = contentEdgeInsets
+        let contentConstraintSize = CGSize(width: size.width - insets.horizontal, height: size.height - insets.vertival)
         let strSize = text?.size(widthConstrainedSize: contentConstraintSize, font: font) ?? .zero
         let bubbleSize = CGSize(width: (strSize.width+insets.horizontal).flat, height: (strSize.height+insets.vertival).flat)
         return bubbleSize
-    }
-    
-    override func sizeThatFits(_ size: CGSize) -> CGSize {
-        return WJTextBubbleView.fitSize(withText: text, font: font, position: position, constraintSize: size, cornerRadiu: cornerRadiu, hookWidth: hookWidth)
     }
     
     override init(frame: CGRect, position: Position = .left) {

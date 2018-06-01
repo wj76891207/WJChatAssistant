@@ -10,16 +10,16 @@ import Foundation
 
 class WJCADialogViewLayout: UICollectionViewLayout {
     
-    var msgViewFrames: [CGRect] = []
     weak var dialogView: WJCADialogView? = nil
     
     override func prepare() {
         super.prepare()
         
-        maxMsgWidth = ((dialogView?.bounds.width ?? UIScreen.main.bounds.width)*0.8).flat
+        maxMsgWidth = ((dialogView?.bounds.width ?? UIScreen.main.bounds.width) - 3*marginToBorder).flat
         maxImageWidth = ((dialogView?.bounds.width ?? UIScreen.main.bounds.width)*0.6).flat
         maxImageHeight = ((dialogView?.bounds.height ?? UIScreen.main.bounds.height)*0.4).flat
-        calculateAllMsgViewFrame()
+
+        initMsgViewEstimatedFrame()
     }
     
     override var collectionViewContentSize: CGSize {
@@ -32,6 +32,8 @@ class WJCADialogViewLayout: UICollectionViewLayout {
         let att = UICollectionViewLayoutAttributes(forCellWith: indexPath)
         
         att.frame = msgViewFrames[indexPath.row]
+        
+        print("---- get cell layout at \(indexPath.row)")
         
         return att
     }
@@ -60,16 +62,45 @@ class WJCADialogViewLayout: UICollectionViewLayout {
         return atts
     }
     
+    /// 记录所有已经根据内容计算好尺寸的cell的尺寸
+    private var msgViewSizes: [Int: CGSize] = [:]
+    /// 记录当前所有cell的frame，包括已经计算，和未计算并使用预估值的
+    private var msgViewFrames: [CGRect] = []
+    
     private let marginBetweenMsg: CGFloat = 20
-    private let marginToBorder: CGFloat = 20
+    private let marginToBorder: CGFloat = 15
+    
     private var maxMsgWidth: CGFloat = 200
     private var maxImageWidth: CGFloat = 200
     private var maxImageHeight: CGFloat = 200
 }
 
+// MARK: - Message Cell View Frame Management
 extension WJCADialogViewLayout {
     
-    func calculateAllMsgViewFrame() {
+    func msgViewSize(at index: Int) -> CGSize? {
+        return msgViewSizes[index]
+    }
+    
+    func msgViewDisaplaySize(at index: Int) -> CGSize {
+        return msgViewSizes[index] ?? WJBubbleView.suggestedMinSize
+    }
+    
+    func updateMsgViewSize(_ size: CGSize, at index: Int) {
+        msgViewSizes[index] = size
+        
+        let oldFrame = msgViewFrames[index]
+        msgViewFrames[index] = CGRect(x: oldFrame.minX, y: oldFrame.minY, width: size.width, height: size.height)
+        
+        let offsetY = size.height-oldFrame.height
+        if offsetY != 0 {
+            for curIndex in index+1 ..< msgViewFrames.count {
+                msgViewFrames[curIndex] = msgViewFrames[curIndex].offsetBy(dx: 0, dy: offsetY)
+            }
+        }
+    }
+    
+    private func initMsgViewEstimatedFrame() {
         guard let dialogView = dialogView else { return }
         
         let msgNumber = dialogView.dataSource?.numberOfMessage(inDialogView: dialogView) ?? 0
@@ -79,23 +110,25 @@ extension WJCADialogViewLayout {
         for index in 0..<msgNumber {
             let msgFrame = msgViewFrame(at: index, withOffsetY: curY)
             msgViewFrames.append(msgFrame)
-                
+            
             curY += msgFrame.height + marginBetweenMsg
         }
     }
     
-    func msgViewFrame(at index: Int, withOffsetY offsetY: CGFloat) -> CGRect {
-        guard
-            let dialogView = dialogView,
-            let msg = dialogView.dataSource?.dialogView(dialogView, messageAtIndex: index),
-            let classType = dialogView.cellClassMap[msg.contentType] else {
-            return .zero
-        }
-        
-        let fitSize: CGSize = msg.contentType == .image ?
+    func maxCellSize(forContentType type: WJCADialogMessage.ContentType) -> CGSize {
+        return type == .image ?
             CGSize(width: maxImageWidth, height: maxImageHeight) :
             CGSize(width: maxMsgWidth, height: CGFloat.greatestFiniteMagnitude)
-        let size = classType.size(fitIn: fitSize, withMessage: msg)
+    }
+    
+    private func msgViewFrame(at index: Int, withOffsetY offsetY: CGFloat) -> CGRect {
+        guard
+            let dialogView = dialogView,
+            let msg = dialogView.dataSource?.dialogView(dialogView, messageAtIndex: index) else {
+            return .zero
+        }
+
+        let size = msgViewDisaplaySize(at: index)
         var x: CGFloat
         switch msg.position {
         case .right:

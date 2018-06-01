@@ -11,9 +11,10 @@ public class WJCADialogView: UIView {
     public weak var delegate: WJCADialogViewDelagate? = nil
     public weak var dataSource: WJCADialogViewDataSource? = nil
     
-    let cellClassMap: [WJCADialogMessage.ContentType: WJCADialogMessageView.Type] = [
-        .text: WJCADialogTextMessageView.self,
-        .image: WJCADialogImageMessageView.self
+    let cellClassMap: [WJCADialogMessage.ContentType: WJCADialogMessageCell.Type] = [
+        .text: WJCADialogTextMessageCell.self,
+        .image: WJCADialogImageMessageCell.self,
+        .options: WJCADialogOptionsMessageCell.self
     ]
     
     private lazy var layout: WJCADialogViewLayout = {
@@ -59,14 +60,30 @@ extension WJCADialogView: UICollectionViewDataSource {
         }
         
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: msg.contentType.rawValue, for: indexPath)
-        if let msgView = cell as? WJCADialogMessageView {
-            msgView.update(withMessage: msg)
+        guard let msgCell = cell as? WJCADialogMessageCell else {
+            return cell
         }
         
-        let invalidationContext = UICollectionViewLayoutInvalidationContext.init()
-        invalidationContext.invalidateItems(at: [indexPath])
-        layout.invalidateLayout(with: invalidationContext)
-        return cell
+        print("---- get cell at \(indexPath.row)")
+        
+        msgCell.update(withMessage: msg)
+        if layout.msgViewSize(at: indexPath.row) == nil {
+            let fitSize = msgCell.sizeThatFits(layout.maxCellSize(forContentType: msg.contentType))
+            layout.updateMsgViewSize(fitSize, at: indexPath.row)
+            
+            if indexPath.row == self.collectionView(collectionView, numberOfItemsInSection: 0) - 1 {
+                let invalidationContext = UICollectionViewLayoutInvalidationContext.init()
+                invalidationContext.invalidateItems(at: [indexPath])
+                layout.invalidateLayout(with: invalidationContext)
+            }
+            else {
+                layout.invalidateLayout()
+            }
+            
+            print("---- invalidateLayout")
+        }
+        
+        return msgCell
     }
     
    

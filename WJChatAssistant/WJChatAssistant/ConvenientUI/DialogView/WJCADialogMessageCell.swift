@@ -9,7 +9,7 @@
 import Foundation
 
 private let avatarSize: CGFloat = 40
-private let marginBetweenAvatarAndBubble: CGFloat = 10
+private let marginBetweenAvatarAndBubble: CGFloat = 6
 
 protocol WJCADialogMessageBubbleViewProtocol {
     
@@ -22,11 +22,9 @@ protocol WJCADialogMessageBubbleViewProtocol {
     var bubbleView: WJBubbleView? { get }
     
     func update(withMessage msg: WJCADialogMessage)
-    
-    static func size(fitIn constraintSize: CGSize, withMessage msg: WJCADialogMessage) -> CGSize
 }
 
-class WJCADialogMessageView: UICollectionViewCell, WJCADialogMessageBubbleViewProtocol {
+class WJCADialogMessageCell: UICollectionViewCell, WJCADialogMessageBubbleViewProtocol {
     
     var showAvatar: Bool = true {
         didSet {
@@ -70,25 +68,29 @@ class WJCADialogMessageView: UICollectionViewCell, WJCADialogMessageBubbleViewPr
         bubbleView?.isProcessing = msg.status == .processing
         
         if showAvatar {
-            avatar = msg.speaker == .bot ? WJCADialogMessageView.defBotAvatar : WJCADialogMessageView.defUserAvatar
+            avatar = msg.speaker == .bot ? WJCADialogMessageCell.defBotAvatar : WJCADialogMessageCell.defUserAvatar
         }
         
         setNeedsLayout()
     }
     
-    class func size(fitIn constraintSize: CGSize, withMessage msg: WJCADialogMessage) -> CGSize {
-        return .zero
+    override func sizeThatFits(_ size: CGSize) -> CGSize {
+        guard let bubbleView = bubbleView else {
+            return WJBubbleView.suggestedMinSize
+        }
+        
+        let bubbleConstraintSize = CGSize(width: bubbleMaxWidth(forConstraintWidth: size.width), height: size.height)
+        let bubbleFitSize = bubbleView.sizeThatFits(bubbleConstraintSize)
+        
+        return CGSize(width: showAvatar ? bubbleFitSize.width+avatarSize+marginBetweenAvatarAndBubble : bubbleFitSize.width,
+                      height: bubbleFitSize.height)
     }
     
-    fileprivate static func bubbleWidth(forConstraintWidth width: CGFloat, showAvatar: Bool = false) -> CGFloat {
+    fileprivate func bubbleMaxWidth(forConstraintWidth width: CGFloat, includeHook: Bool = true) -> CGFloat {
         if showAvatar == false {
             return width
         }
-        return width - avatarSize - marginBetweenAvatarAndBubble
-    }
-    
-    fileprivate static func bubbleSize(forConstraintWidth size: CGSize, showAvatar: Bool = false) -> CGSize {
-        return CGSize(width: bubbleWidth(forConstraintWidth: size.width, showAvatar: showAvatar) , height: size.height)
+        return width - avatarSize - marginBetweenAvatarAndBubble - (includeHook ? 0 : (bubbleView?.hookWidth ?? 0))
     }
     
     /// subclass should call this at the end of init
@@ -117,13 +119,11 @@ class WJCADialogMessageView: UICollectionViewCell, WJCADialogMessageBubbleViewPr
         }
     }
     
-    
-    
     override func layoutSubviews() {
         super.layoutSubviews()
         
         guard let bubbleView = bubbleView else { return }
-        let bubbleW = WJCADialogMessageView.bubbleWidth(forConstraintWidth: bounds.width, showAvatar: showAvatar)
+        let bubbleW = bubbleMaxWidth(forConstraintWidth: bounds.width)
         if !showAvatar {
             bubbleView.frame = bounds
         }
@@ -138,7 +138,7 @@ class WJCADialogMessageView: UICollectionViewCell, WJCADialogMessageBubbleViewPr
     }
 }
 
-class WJCADialogTextMessageView: WJCADialogMessageView {
+class WJCADialogTextMessageCell: WJCADialogMessageCell {
     
     fileprivate var textBubbleView: WJTextBubbleView { return bubbleView as! WJTextBubbleView }
     
@@ -159,28 +159,9 @@ class WJCADialogTextMessageView: WJCADialogMessageView {
         textBubbleView.text = msg.content as? String
     }
     
-    override class func size(fitIn constraintSize: CGSize, withMessage msg: WJCADialogMessage) -> CGSize {
-        let showAvatar = msg.position != .center
-        
-        let bubbleFitSize: CGSize
-        if msg.status == .processing {
-            bubbleFitSize = WJTextBubbleView.suggestedMinSize
-        }
-        else {
-            let bubbleConstraintSize = WJCADialogMessageView.bubbleSize(forConstraintWidth: constraintSize, showAvatar: showAvatar)
-            bubbleFitSize = WJTextBubbleView.fitSize(withText: msg.content as? String,
-                                                     font: UIFont.systemFont(ofSize: 16),
-                                                     position: msg.position,
-                                                     constraintSize: bubbleConstraintSize)
-        }
-        
-        return CGSize(width: showAvatar ? bubbleFitSize.width+avatarSize+marginBetweenAvatarAndBubble : bubbleFitSize.width,
-                      height: bubbleFitSize.height)
-    }
-    
 }
 
-class WJCADialogImageMessageView: WJCADialogMessageView {
+class WJCADialogImageMessageCell: WJCADialogMessageCell {
     
     private var imageBubbleView: WJImageBubbleView { return bubbleView as! WJImageBubbleView }
     
@@ -201,29 +182,12 @@ class WJCADialogImageMessageView: WJCADialogMessageView {
         super.update(withMessage: msg)
         imageBubbleView.image = msg.content as? UIImage
     }
-    
-    override static func size(fitIn constraintSize: CGSize, withMessage msg: WJCADialogMessage) -> CGSize {
-        let showAvatar = msg.position != .center
-        
-        let bubbleFitSize: CGSize
-        if msg.status == .processing {
-            bubbleFitSize = WJTextBubbleView.suggestedMinSize
-        }
-        else {
-            let bubbleConstraintSize = WJCADialogMessageView.bubbleSize(forConstraintWidth: constraintSize, showAvatar: showAvatar)
-            bubbleFitSize = WJImageBubbleView.fitSize(withImage: msg.content as? UIImage,
-                                                      position: msg.position,
-                                                      constraintSize: bubbleConstraintSize)
-        }
-        
-        return CGSize(width: showAvatar ? bubbleFitSize.width+avatarSize+marginBetweenAvatarAndBubble : bubbleFitSize.width,
-                      height: bubbleFitSize.height)
-    }
 }
 
-class WJCADialogOptionsMessageView: WJCADialogTextMessageView {
+class WJCADialogOptionsMessageCell: WJCADialogTextMessageCell {
     
     private var optionsButtonView = WJButtonGroup()
+    private let marginOfTitleAndOptions: CGFloat = 5
     
     override func didInitialized() {
         super.didInitialized()
@@ -239,18 +203,37 @@ class WJCADialogOptionsMessageView: WJCADialogTextMessageView {
         }
     }
     
-    override static func size(fitIn constraintSize: CGSize, withMessage msg: WJCADialogMessage) -> CGSize {
-        guard let optionContent = msg.content as? WJCADialogOptionMessageContent else {
-            return super.size(fitIn: constraintSize, withMessage: msg)
-        }
+    private func optionButtonViewSizeThatFits(_ size: CGSize) -> CGSize {
+        let optionConstraintSize = CGSize(width: bubbleMaxWidth(forConstraintWidth: size.width, includeHook: false), height: size.height)
+        return optionsButtonView.sizeThatFits(optionConstraintSize)
+    }
+    
+    override func sizeThatFits(_ size: CGSize) -> CGSize {
+        let titleAreaSize = super.sizeThatFits(size)
+        let optionAreaSize = optionButtonViewSizeThatFits(size)
+        
+        return CGSize(width: max(titleAreaSize.width, optionAreaSize.width),
+                      height: titleAreaSize.height+optionAreaSize.height+marginOfTitleAndOptions)
+    }
+    
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        guard let bubbleView = bubbleView else { return }
 
-        let showAvatar = msg.position != .center
-        var tmpMsg = msg
-        tmpMsg.content = optionContent.title
-        var size = super.size(fitIn: constraintSize, withMessage: tmpMsg)
+        let titleAreaSize = super.sizeThatFits(bounds.size)
+        let optionAreaSize = optionButtonViewSizeThatFits(bounds.size)
         
+        let bubbleFrame = bubbleView.frame
+        bubbleView.frame = CGRect(x: bubbleFrame.minX,
+                                  y: bubbleFrame.minY,
+                                  width: bubbleFrame.width - (bounds.size.width - titleAreaSize.width - marginOfTitleAndOptions),
+                                  height: bubbleFrame.height - optionAreaSize.height)
         
-        return size
+        let startX = bubbleView.position == .left ? bubbleFrame.minX+bubbleView.hookWidth : bubbleFrame.minX
+        optionsButtonView.frame = CGRect(x: startX,
+                                         y: bubbleView.frame.maxY+marginOfTitleAndOptions,
+                                         width: optionAreaSize.width,
+                                         height: optionAreaSize.height)
     }
 }
 

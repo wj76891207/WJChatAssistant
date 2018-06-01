@@ -77,7 +77,7 @@ class WJBubbleView: UIView {
                 processingView?.removeFromSuperview()
                 processingView = nil
             }
-            else {
+            else if processingView == nil {
                 var size = type(of: self).suggestedMinSize
                 if position != .center {
                     size.width -= hookWidth
@@ -90,28 +90,31 @@ class WJBubbleView: UIView {
     }
     
     var contentEdgeInsets: UIEdgeInsets {
-        return type(of: self).contentEdgeInsets(withPosition: position, cornerRadiu: cornerRadiu, hookWidth: hookWidth)
-    }
-    
-    class func contentEdgeInsets(withPosition position: Position, cornerRadiu: CGFloat = 15, hookWidth: CGFloat = 7.5) -> UIEdgeInsets {
         return UIEdgeInsets(top: cornerRadiu,
                             left: (position == .left ? hookWidth : 0) + cornerRadiu*2/3,
                             bottom: cornerRadiu,
                             right: (position == .right ? hookWidth : 0) + cornerRadiu*2/3)
     }
     
+//    class func contentEdgeInsets(withPosition position: Position, cornerRadiu: CGFloat = 15, hookWidth: CGFloat = 7.5) -> UIEdgeInsets {
+//        return UIEdgeInsets(top: cornerRadiu,
+//                            left: (position == .left ? hookWidth : 0) + cornerRadiu*2/3,
+//                            bottom: cornerRadiu,
+//                            right: (position == .right ? hookWidth : 0) + cornerRadiu*2/3)
+//    }
+    
     // 气泡建议的最大最小尺寸
     static var suggestedMinSize = CGSize(width: 60, height: 40)
     static var suggestedMaxSize = CGSize(width: (UIScreen.main.bounds.width*0.6).flat,
                                          height: (UIScreen.main.bounds.height*0.6).flat)
     
-    class func size(withContent content: Any,
-                    position: Position,
-                    constraintSize: CGSize? = nil,
-                    cornerRadiu: CGFloat = 15,
-                    hookWidth: CGFloat = 7.5) -> CGSize {
-        return suggestedMinSize
-    }
+//    class func size(withContent content: Any,
+//                    position: Position,
+//                    constraintSize: CGSize? = nil,
+//                    cornerRadiu: CGFloat = 15,
+//                    hookWidth: CGFloat = 7.5) -> CGSize {
+//        return suggestedMinSize
+//    }
     
     init(frame: CGRect, position: Position = .left) {
         super.init(frame: frame)
@@ -124,7 +127,7 @@ class WJBubbleView: UIView {
     }
 
     override func sizeThatFits(_ size: CGSize) -> CGSize {
-        return CGSize(width: cornerRadiu*2, height: 40)
+        return type(of: self).suggestedMinSize
     }
     
     private func updateShape() {

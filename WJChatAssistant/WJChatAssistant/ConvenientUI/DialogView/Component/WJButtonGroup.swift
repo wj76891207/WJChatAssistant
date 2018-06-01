@@ -48,7 +48,7 @@ class WJButtonGroup: UIView {
     override init(frame: CGRect) {
         super.init(frame: frame)
         
-        tintColor = UIColor.blue
+        tintColor = UIColor.init(red: 96/255.0, green: 143/255.0, blue: 233/255.0, alpha: 1)
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -79,7 +79,7 @@ class WJButtonGroup: UIView {
     override func sizeThatFits(_ size: CGSize) -> CGSize {
 
         var fitSize = CGSize.zero
-        buttonsFrameThatFits(bounds.size).forEach {
+        buttonsFrameThatFits(size).forEach {
             fitSize.width = max($0.maxX, fitSize.width)
             fitSize.height = max($0.maxY, fitSize.height)
         }

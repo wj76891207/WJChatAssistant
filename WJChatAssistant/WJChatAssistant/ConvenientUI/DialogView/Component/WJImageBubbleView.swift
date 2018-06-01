@@ -50,12 +50,15 @@ class WJImageBubbleView: WJBubbleView {
     }
     
     override func sizeThatFits(_ size: CGSize) -> CGSize {
+        if isProcessing {
+            return super.sizeThatFits(size)
+        }
         
-        return WJImageBubbleView.fitSize(withImage: image,
-                                         position: position,
-                                         constraintSize: size,
-                                         cornerRadiu: cornerRadiu,
-                                         hookWidth: hookWidth)
+        let minSize = type(of: self).suggestedMinSize
+        let imgSize = image?.size ?? minSize
+        let maxSize = size
+        
+        return imgSize.scaleToFit(minSize: minSize, maxSize: maxSize)
     }
     
     private func updateImage() {

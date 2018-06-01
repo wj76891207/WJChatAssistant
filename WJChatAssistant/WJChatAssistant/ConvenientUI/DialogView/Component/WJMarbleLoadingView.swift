@@ -44,7 +44,7 @@ class WJMarbleLoadingView: UIView {
         
         let jumpInterval = jumpTime/3
         let timeInterval = jumpTime + restTime + (Double(marbleNumber)-1)*jumpInterval
-        jumpingTimer = Timer.scheduledTimer(withTimeInterval: timeInterval, repeats: true) { [weak self] _ in
+        jumpingTimer = Timer.init(timeInterval: timeInterval, repeats: true) { [weak self] _ in
             guard let strongSelf = self else { return }
             
             var delayTime: TimeInterval = 0
@@ -64,6 +64,8 @@ class WJMarbleLoadingView: UIView {
                 delayTime += jumpInterval
             }
         }
+        
+        RunLoop.main.add(jumpingTimer!, forMode: .commonModes)
         jumpingTimer?.fire()
     }
     

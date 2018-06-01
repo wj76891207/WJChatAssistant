@@ -69,13 +69,8 @@ extension WJCAViewController: WJChatAssistantDelegate {
 // MARK: - WJCADialogViewDatasource
 extension WJCAViewController: WJCADialogViewDataSource {
     
-    public func numberOfMessage(inDialogView dialogView: WJCADialogView) -> Int {
-        return 5
-    }
-    
-    public func dialogView(_ dialogView: WJCADialogView, messageAtIndex index: Int) -> WJCADialogMessage {
-        
-        let messages: [WJCADialogMessage] = [
+    var messages: [WJCADialogMessage] {
+        return [
             {
                 var msg = WJCADialogMessage()
                 msg.content = "Hi，小璇"
@@ -135,7 +130,13 @@ extension WJCAViewController: WJCADialogViewDataSource {
                 return msg
             }()
         ]
-        
+    }
+    
+    public func numberOfMessage(inDialogView dialogView: WJCADialogView) -> Int {
+        return messages.count
+    }
+    
+    public func dialogView(_ dialogView: WJCADialogView, messageAtIndex index: Int) -> WJCADialogMessage {
         return messages[index]
     }
 }

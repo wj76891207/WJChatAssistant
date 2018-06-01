@@ -7,7 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		C9A9089B20BE3FCF00E611A0 /* WJCADialogMessageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9A9089A20BE3FCF00E611A0 /* WJCADialogMessageView.swift */; };
+		C949B99820C137BA00946615 /* WJCARecordButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = C949B99720C137B900946615 /* WJCARecordButton.swift */; };
+		C9A9089B20BE3FCF00E611A0 /* WJCADialogMessageCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9A9089A20BE3FCF00E611A0 /* WJCADialogMessageCell.swift */; };
 		C9A9089E20BEAFA900E611A0 /* images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C9A9089D20BEAFA900E611A0 /* images.xcassets */; };
 		C9AB7BC420BFA5FE00EF4451 /* WJMarbleLoadingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9AB7BC320BFA5FE00EF4451 /* WJMarbleLoadingView.swift */; };
 		C9AB7BC620BFDE8B00EF4451 /* WJButtonGroup.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9AB7BC520BFDE8B00EF4451 /* WJButtonGroup.swift */; };
@@ -144,7 +145,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		C9A9089A20BE3FCF00E611A0 /* WJCADialogMessageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WJCADialogMessageView.swift; sourceTree = "<group>"; };
+		C949B99720C137B900946615 /* WJCARecordButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WJCARecordButton.swift; sourceTree = "<group>"; };
+		C9A9089A20BE3FCF00E611A0 /* WJCADialogMessageCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WJCADialogMessageCell.swift; sourceTree = "<group>"; };
 		C9A9089D20BEAFA900E611A0 /* images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = images.xcassets; sourceTree = "<group>"; };
 		C9AB7BC320BFA5FE00EF4451 /* WJMarbleLoadingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WJMarbleLoadingView.swift; sourceTree = "<group>"; };
 		C9AB7BC520BFDE8B00EF4451 /* WJButtonGroup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WJButtonGroup.swift; sourceTree = "<group>"; };
@@ -296,6 +298,7 @@
 				C9AEE42020BB9E9200FC24F7 /* WJCAFunctionBar.swift */,
 				C9AEE42220BB9F3C00FC24F7 /* WJCAFunctionBarDelegate.swift */,
 				C9AEE42420BB9F7B00FC24F7 /* WJCAFunctionBarDatasource.swift */,
+				C949B99720C137B900946615 /* WJCARecordButton.swift */,
 			);
 			path = FunctionBar;
 			sourceTree = "<group>";
@@ -308,8 +311,7 @@
 				C9C959E620B801BF00E72454 /* WJCADialogViewDelegate.swift */,
 				C9C959E820B8020A00E72454 /* WJCADialogViewDataSource.swift */,
 				C9BB2A0D20BD578200C78746 /* WJCADialogMessage.swift */,
-				C9A9089A20BE3FCF00E611A0 /* WJCADialogMessageView.swift */,
-				C9A9089D20BEAFA900E611A0 /* images.xcassets */,
+				C9A9089A20BE3FCF00E611A0 /* WJCADialogMessageCell.swift */,
 				C9AEE42A20BBEAAC00FC24F7 /* Component */,
 			);
 			path = DialogView;
@@ -548,6 +550,7 @@
 				C9AEE41C20BB9DA900FC24F7 /* WJCAViewControllerDelegate.swift */,
 				C9AEE41E20BB9DBE00FC24F7 /* WJCAViewControllerDatasource.swift */,
 				C9AEE42720BBA4E900FC24F7 /* WJCAViewHelper.swift */,
+				C9A9089D20BEAFA900E611A0 /* images.xcassets */,
 				C9AEE41920BB9D6600FC24F7 /* DialogView */,
 				C9AEE41820BB9D5B00FC24F7 /* FunctionBar */,
 			);
@@ -804,7 +807,8 @@
 				C9AB7BC420BFA5FE00EF4451 /* WJMarbleLoadingView.swift in Sources */,
 				C9AEE42320BB9F3C00FC24F7 /* WJCAFunctionBarDelegate.swift in Sources */,
 				C9AEE42520BB9F7B00FC24F7 /* WJCAFunctionBarDatasource.swift in Sources */,
-				C9A9089B20BE3FCF00E611A0 /* WJCADialogMessageView.swift in Sources */,
+				C949B99820C137BA00946615 /* WJCARecordButton.swift in Sources */,
+				C9A9089B20BE3FCF00E611A0 /* WJCADialogMessageCell.swift in Sources */,
 				C9AEE43620BBF04100FC24F7 /* WJImageBubbleView.swift in Sources */,
 				C9BB2A0E20BD578200C78746 /* WJCADialogMessage.swift in Sources */,
 				C9AEE42C20BBEBAE00FC24F7 /* WJSoundWaveView.swift in Sources */,
