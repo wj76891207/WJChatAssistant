@@ -33,7 +33,7 @@ class WJCADialogViewLayout: UICollectionViewLayout {
         
         att.frame = msgViewFrames[indexPath.row]
         
-        print("---- get cell layout at \(indexPath.row)")
+//        print("---- get cell layout at \(indexPath.row)")
         
         return att
     }
@@ -45,6 +45,7 @@ class WJCADialogViewLayout: UICollectionViewLayout {
         
         let offsetX = msg.position == .right ? dialogView.frame.width-att.frame.minX : -att.frame.maxX
         att.frame = att.frame.offsetBy(dx: offsetX, dy: 0)
+        att.alpha = 0.0
         
         return att
     }
@@ -86,11 +87,20 @@ extension WJCADialogViewLayout {
         return msgViewSizes[index] ?? WJBubbleView.suggestedMinSize
     }
     
-    func updateMsgViewSize(_ size: CGSize, at index: Int) {
+    func updateMsgViewSize(_ size: CGSize, at index: Int, with position: WJBubbleView.Position) {
         msgViewSizes[index] = size
         
         let oldFrame = msgViewFrames[index]
-        msgViewFrames[index] = CGRect(x: oldFrame.minX, y: oldFrame.minY, width: size.width, height: size.height)
+        var x: CGFloat = oldFrame.minX
+        switch position {
+        case .right:
+            x = oldFrame.maxX - size.width
+        case .center:
+            x = (oldFrame.minX - (size.width - oldFrame.width)/2).flat
+        default:
+            break
+        }
+        msgViewFrames[index] = CGRect(x: x, y: oldFrame.minY, width: size.width, height: size.height)
         
         let offsetY = size.height-oldFrame.height
         if offsetY != 0 {

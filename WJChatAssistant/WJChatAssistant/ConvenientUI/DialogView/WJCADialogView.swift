@@ -14,7 +14,8 @@ public class WJCADialogView: UIView {
     let cellClassMap: [WJCADialogMessage.ContentType: WJCADialogMessageCell.Type] = [
         .text: WJCADialogTextMessageCell.self,
         .image: WJCADialogImageMessageCell.self,
-        .options: WJCADialogOptionsMessageCell.self
+        .options: WJCADialogOptionsMessageCell.self,
+        .optionsList: WJCADialogOptionsMessageCell.self
     ]
     
     private lazy var layout: WJCADialogViewLayout = {
@@ -37,6 +38,12 @@ public class WJCADialogView: UIView {
         return collectionView
     }()
     
+    public var contentInset: UIEdgeInsets = .zero {
+        didSet {
+            msgListView.contentInset = contentInset
+        }
+    }
+    
     public override init(frame: CGRect) {
         super.init(frame: frame)
         
@@ -45,6 +52,17 @@ public class WJCADialogView: UIView {
     
     required public init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    public override func layoutSubviews() {
+        super.layoutSubviews()
+        
+        msgListView.frame = bounds
+    }
+    
+    public func appendMsg() {
+        let total = msgListView.numberOfItems(inSection: 0)
+        msgListView.insertItems(at: [IndexPath(row: total, section: 0)])
     }
 }
 
@@ -64,12 +82,12 @@ extension WJCADialogView: UICollectionViewDataSource {
             return cell
         }
         
-        print("---- get cell at \(indexPath.row)")
+//        print("---- get cell at \(indexPath.row)")
         
         msgCell.update(withMessage: msg)
         if layout.msgViewSize(at: indexPath.row) == nil {
             let fitSize = msgCell.sizeThatFits(layout.maxCellSize(forContentType: msg.contentType))
-            layout.updateMsgViewSize(fitSize, at: indexPath.row)
+            layout.updateMsgViewSize(fitSize, at: indexPath.row, with: msg.position)
             
             if indexPath.row == self.collectionView(collectionView, numberOfItemsInSection: 0) - 1 {
                 let invalidationContext = UICollectionViewLayoutInvalidationContext.init()
@@ -80,7 +98,7 @@ extension WJCADialogView: UICollectionViewDataSource {
                 layout.invalidateLayout()
             }
             
-            print("---- invalidateLayout")
+//            print("---- invalidateLayout")
         }
         
         return msgCell

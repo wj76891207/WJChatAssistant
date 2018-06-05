@@ -32,6 +32,7 @@ public struct WJCADialogMessage {
         case text
         case image
         case options
+        case optionsList
         case custom
     }
     

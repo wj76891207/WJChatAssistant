@@ -7,9 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		C949B99820C137BA00946615 /* WJCARecordButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = C949B99720C137B900946615 /* WJCARecordButton.swift */; };
+		C949B99820C137BA00946615 /* WJRecordButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = C949B99720C137B900946615 /* WJRecordButton.swift */; };
+		C969879320C691C700342676 /* WJChatAssistant.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C9C958FD20B7EF5C00E72454 /* WJChatAssistant.framework */; };
 		C9A9089B20BE3FCF00E611A0 /* WJCADialogMessageCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9A9089A20BE3FCF00E611A0 /* WJCADialogMessageCell.swift */; };
-		C9A9089E20BEAFA900E611A0 /* images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C9A9089D20BEAFA900E611A0 /* images.xcassets */; };
 		C9AB7BC420BFA5FE00EF4451 /* WJMarbleLoadingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9AB7BC320BFA5FE00EF4451 /* WJMarbleLoadingView.swift */; };
 		C9AB7BC620BFDE8B00EF4451 /* WJButtonGroup.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9AB7BC520BFDE8B00EF4451 /* WJButtonGroup.swift */; };
 		C9AEE41B20BB9D8F00FC24F7 /* WJCAViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9AEE41A20BB9D8F00FC24F7 /* WJCAViewController.swift */; };
@@ -24,6 +24,10 @@
 		C9AEE43220BBF00900FC24F7 /* WJBubbleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9AEE43120BBF00900FC24F7 /* WJBubbleView.swift */; };
 		C9AEE43420BBF02D00FC24F7 /* WJTextBubbleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9AEE43320BBF02D00FC24F7 /* WJTextBubbleView.swift */; };
 		C9AEE43620BBF04100FC24F7 /* WJImageBubbleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9AEE43520BBF04100FC24F7 /* WJImageBubbleView.swift */; };
+		C9B1FA4C20C500C000836AF5 /* WJRecordingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9B1FA4B20C500C000836AF5 /* WJRecordingView.swift */; };
+		C9B1FA5420C515CD00836AF5 /* WJCARecordingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9B1FA5320C515CD00836AF5 /* WJCARecordingViewController.swift */; };
+		C9B1FA5620C515E500836AF5 /* WJCATypingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9B1FA5520C515E500836AF5 /* WJCATypingViewController.swift */; };
+		C9B1FA5820C5347E00836AF5 /* images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C9B1FA5720C5347E00836AF5 /* images.xcassets */; };
 		C9BB2A0E20BD578200C78746 /* WJCADialogMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9BB2A0D20BD578200C78746 /* WJCADialogMessage.swift */; };
 		C9C9590720B7EF5C00E72454 /* WJChatAssistant.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C9C958FD20B7EF5C00E72454 /* WJChatAssistant.framework */; };
 		C9C9590C20B7EF5C00E72454 /* WJChatAssistantTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9C9590B20B7EF5C00E72454 /* WJChatAssistantTests.swift */; };
@@ -145,9 +149,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		C949B99720C137B900946615 /* WJCARecordButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WJCARecordButton.swift; sourceTree = "<group>"; };
+		C949B99720C137B900946615 /* WJRecordButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WJRecordButton.swift; sourceTree = "<group>"; };
 		C9A9089A20BE3FCF00E611A0 /* WJCADialogMessageCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WJCADialogMessageCell.swift; sourceTree = "<group>"; };
-		C9A9089D20BEAFA900E611A0 /* images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = images.xcassets; sourceTree = "<group>"; };
 		C9AB7BC320BFA5FE00EF4451 /* WJMarbleLoadingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WJMarbleLoadingView.swift; sourceTree = "<group>"; };
 		C9AB7BC520BFDE8B00EF4451 /* WJButtonGroup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WJButtonGroup.swift; sourceTree = "<group>"; };
 		C9AEE41A20BB9D8F00FC24F7 /* WJCAViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WJCAViewController.swift; sourceTree = "<group>"; };
@@ -162,6 +165,10 @@
 		C9AEE43120BBF00900FC24F7 /* WJBubbleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WJBubbleView.swift; sourceTree = "<group>"; };
 		C9AEE43320BBF02D00FC24F7 /* WJTextBubbleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WJTextBubbleView.swift; sourceTree = "<group>"; };
 		C9AEE43520BBF04100FC24F7 /* WJImageBubbleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WJImageBubbleView.swift; sourceTree = "<group>"; };
+		C9B1FA4B20C500C000836AF5 /* WJRecordingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WJRecordingView.swift; sourceTree = "<group>"; };
+		C9B1FA5320C515CD00836AF5 /* WJCARecordingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WJCARecordingViewController.swift; sourceTree = "<group>"; };
+		C9B1FA5520C515E500836AF5 /* WJCATypingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WJCATypingViewController.swift; sourceTree = "<group>"; };
+		C9B1FA5720C5347E00836AF5 /* images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = images.xcassets; sourceTree = "<group>"; };
 		C9BB2A0D20BD578200C78746 /* WJCADialogMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WJCADialogMessage.swift; sourceTree = "<group>"; };
 		C9C958FD20B7EF5C00E72454 /* WJChatAssistant.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = WJChatAssistant.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		C9C9590020B7EF5C00E72454 /* WJChatAssistant.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WJChatAssistant.h; sourceTree = "<group>"; };
@@ -275,6 +282,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C969879320C691C700342676 /* WJChatAssistant.framework in Frameworks */,
 				C9C959D720B7FBFD00E72454 /* libBaiduSpeechSDK.a in Frameworks */,
 				C9C959D520B7FBA300E72454 /* libc++.tbd in Frameworks */,
 				C9C959D320B7FB9900E72454 /* libz.1.2.5.tbd in Frameworks */,
@@ -298,7 +306,9 @@
 				C9AEE42020BB9E9200FC24F7 /* WJCAFunctionBar.swift */,
 				C9AEE42220BB9F3C00FC24F7 /* WJCAFunctionBarDelegate.swift */,
 				C9AEE42420BB9F7B00FC24F7 /* WJCAFunctionBarDatasource.swift */,
-				C949B99720C137B900946615 /* WJCARecordButton.swift */,
+				C9B1FA5320C515CD00836AF5 /* WJCARecordingViewController.swift */,
+				C9B1FA5520C515E500836AF5 /* WJCATypingViewController.swift */,
+				C9B1FA4D20C500F400836AF5 /* Components */,
 			);
 			path = FunctionBar;
 			sourceTree = "<group>";
@@ -320,7 +330,6 @@
 		C9AEE42A20BBEAAC00FC24F7 /* Component */ = {
 			isa = PBXGroup;
 			children = (
-				C9AEE42B20BBEBAE00FC24F7 /* WJSoundWaveView.swift */,
 				C9AEE43120BBF00900FC24F7 /* WJBubbleView.swift */,
 				C9AEE43320BBF02D00FC24F7 /* WJTextBubbleView.swift */,
 				C9AEE43520BBF04100FC24F7 /* WJImageBubbleView.swift */,
@@ -328,6 +337,16 @@
 				C9AB7BC520BFDE8B00EF4451 /* WJButtonGroup.swift */,
 			);
 			path = Component;
+			sourceTree = "<group>";
+		};
+		C9B1FA4D20C500F400836AF5 /* Components */ = {
+			isa = PBXGroup;
+			children = (
+				C949B99720C137B900946615 /* WJRecordButton.swift */,
+				C9B1FA4B20C500C000836AF5 /* WJRecordingView.swift */,
+				C9AEE42B20BBEBAE00FC24F7 /* WJSoundWaveView.swift */,
+			);
+			path = Components;
 			sourceTree = "<group>";
 		};
 		C9C958F320B7EF5C00E72454 = {
@@ -550,7 +569,7 @@
 				C9AEE41C20BB9DA900FC24F7 /* WJCAViewControllerDelegate.swift */,
 				C9AEE41E20BB9DBE00FC24F7 /* WJCAViewControllerDatasource.swift */,
 				C9AEE42720BBA4E900FC24F7 /* WJCAViewHelper.swift */,
-				C9A9089D20BEAFA900E611A0 /* images.xcassets */,
+				C9B1FA5720C5347E00836AF5 /* images.xcassets */,
 				C9AEE41920BB9D6600FC24F7 /* DialogView */,
 				C9AEE41820BB9D5B00FC24F7 /* FunctionBar */,
 			);
@@ -737,7 +756,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				C9A9089E20BEAFA900E611A0 /* images.xcassets in Resources */,
+				C9B1FA5820C5347E00836AF5 /* images.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -796,7 +815,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C9B1FA5620C515E500836AF5 /* WJCATypingViewController.swift in Sources */,
 				C9AB7BC620BFDE8B00EF4451 /* WJButtonGroup.swift in Sources */,
+				C9B1FA5420C515CD00836AF5 /* WJCARecordingViewController.swift in Sources */,
 				C9AEE42120BB9E9200FC24F7 /* WJCAFunctionBar.swift in Sources */,
 				C9C959E320B800E600E72454 /* WJIntentRecognizerProtocol.swift in Sources */,
 				C9AEE42E20BBEE4100FC24F7 /* WJCADialogViewLayout.swift in Sources */,
@@ -807,7 +828,7 @@
 				C9AB7BC420BFA5FE00EF4451 /* WJMarbleLoadingView.swift in Sources */,
 				C9AEE42320BB9F3C00FC24F7 /* WJCAFunctionBarDelegate.swift in Sources */,
 				C9AEE42520BB9F7B00FC24F7 /* WJCAFunctionBarDatasource.swift in Sources */,
-				C949B99820C137BA00946615 /* WJCARecordButton.swift in Sources */,
+				C949B99820C137BA00946615 /* WJRecordButton.swift in Sources */,
 				C9A9089B20BE3FCF00E611A0 /* WJCADialogMessageCell.swift in Sources */,
 				C9AEE43620BBF04100FC24F7 /* WJImageBubbleView.swift in Sources */,
 				C9BB2A0E20BD578200C78746 /* WJCADialogMessage.swift in Sources */,
@@ -815,6 +836,7 @@
 				C9AEE41F20BB9DBE00FC24F7 /* WJCAViewControllerDatasource.swift in Sources */,
 				C9AEE42820BBA4E900FC24F7 /* WJCAViewHelper.swift in Sources */,
 				C9C959E920B8020A00E72454 /* WJCADialogViewDataSource.swift in Sources */,
+				C9B1FA4C20C500C000836AF5 /* WJRecordingView.swift in Sources */,
 				C9AEE43420BBF02D00FC24F7 /* WJTextBubbleView.swift in Sources */,
 				C9C959DF20B7FDD300E72454 /* DefaultSpeechRecognizer.swift in Sources */,
 				C9C959D920B7FC8D00E72454 /* WJChatAssistant.swift in Sources */,
@@ -1089,7 +1111,7 @@
 				DEVELOPMENT_TEAM = P2FGY3UPHE;
 				INFOPLIST_FILE = WJChatAssistantDemo/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = www.wxchina.com.WJChatAssistantDemo;
+				PRODUCT_BUNDLE_IDENTIFIER = com.baidu.speech.MYBDSClientSample;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -1105,7 +1127,7 @@
 				DEVELOPMENT_TEAM = P2FGY3UPHE;
 				INFOPLIST_FILE = WJChatAssistantDemo/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = www.wxchina.com.WJChatAssistantDemo;
+				PRODUCT_BUNDLE_IDENTIFIER = com.baidu.speech.MYBDSClientSample;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";

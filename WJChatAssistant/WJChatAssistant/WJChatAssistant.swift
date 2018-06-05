@@ -48,15 +48,15 @@ public class WJChatAssistant {
 extension WJChatAssistant: WJSpeechRecognizerDelegate {
     
     public func wjSpeechRecognizerUpdateVoicePower(_ averagePower: Float?, peakPower: Float?) {
-        
+        delegate?.wjChatAssistantUpdateVoicePower(averagePower, peakPower: peakPower)
     }
     
-    public func wjSpeechRecognizerOccurError(_ error: NSError) {
-        
+    public func wjSpeechRecognizerComplate(_ isSuceessful: Bool, _ error: NSError?) {
+        delegate?.wjChatAssistantSpeechRecognizeComplate(isSuceessful, error)
     }
     
     public func wjSpeechRecognizerUpdateRecognitionResult(_ result: WJSpeechRecognitionResult) {
-        
+        delegate?.wjChatAssistantUpdateSpeechRecognizeResult(result)
     }
 }
 

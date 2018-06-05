@@ -11,11 +11,16 @@ import UIKit
 public class WJSoundWaveView: UIView {
     
     public enum Style {
-        case stripe     // 线条状抛物线
-        case halo       // 对称的抛物线组成的色块
-        case pillar     // 柱状图
-        case brick      // 方块柱状图
-        case trace      // 带尾迹的方块柱状图
+        /// 线条状抛物线
+        case stripe
+        /// 对称的抛物线组成的色块
+        case halo
+        /// 柱状图
+        case pillar
+        /// 方块柱状图
+        case brick
+        /// 带尾迹的方块柱状图
+        case trace
     }
     public var style = Style.stripe
     
@@ -29,7 +34,7 @@ public class WJSoundWaveView: UIView {
     private let waveDistance: CGFloat = 5
     private let displayAreaRate: CGFloat = 0.5 // 指定水平方向上用于显示波纹的区域的比例，0.5表示居中的一半区域用于显示
     private var waveMaxNumber: UInt = 8
-    private var renderWaveItems: [UInt : XTWaveItem] = [:]
+    private var renderWaveItems: [UInt : XJWaveItem] = [:]
     
     private var waveW: CGFloat = 0
     private var waveH: CGFloat = 0
@@ -47,9 +52,22 @@ public class WJSoundWaveView: UIView {
     }
     
     private func didInit() {
-        backgroundColor = UIColor.lightGray
-        
-        // 中间二分之一的区域用于波纹放置点
+        backgroundColor = UIColor.white
+        displayLink.add(to: .current, forMode: .defaultRunLoopMode)
+    }
+    
+    deinit {
+        displayLink.invalidate()
+    }
+    
+    public override var frame: CGRect {
+        didSet {
+            updateParameters()
+        }
+    }
+    
+    private func updateParameters() {
+        // 中间三分之二的区域用于波纹放置点
         waveMaxNumber = UInt(ceil(frame.width*displayAreaRate/waveDistance))
         
         if style == .pillar {
@@ -59,23 +77,21 @@ public class WJSoundWaveView: UIView {
             waveW = brickWaveW()
         }
         else if style == .halo {
-            waveW = bounds.height*2
+            waveW = bounds.height*1.5
         }
         else {
             waveW = bounds.height
         }
         waveH = bounds.height/2
-        
-        displayLink.add(to: .current, forMode: .defaultRunLoopMode)
-    }
-    
-    deinit {
-        displayLink.invalidate()
     }
     
     /// 添加一个随机的波纹
     
     public func addWave(withAmplitude amplitude: CGFloat? = nil, narrowExp: CGFloat? = nil, position: UInt? = nil) {
+        
+        if displayLink.isPaused == true {
+            displayLink.isPaused = false
+        }
         
         let _position = position ?? UInt(arc4random_uniform(UInt32(waveMaxNumber-1)))  // 控制显示的位置
         let _amplitude = amplitude ?? CGFloat.random(min: 0.1, max: 1) // 生成一个 [0.1, 1] 之间的随机数，作为随机振幅
@@ -91,7 +107,7 @@ public class WJSoundWaveView: UIView {
         }
         else {
             // 创建新的wave
-            var newWaveItem = XTWaveItem()
+            var newWaveItem = XJWaveItem()
             newWaveItem.position = _position
             newWaveItem.amplitude = _amplitude
             newWaveItem.narrowExp = narrowExp ?? CGFloat(arc4random_uniform(10)) + 2
@@ -108,7 +124,7 @@ public class WJSoundWaveView: UIView {
     
     @objc private func updateWave() {
         let riseStep: CGFloat = 0.1
-        let downStep: CGFloat = 0.01
+        let downStep: CGFloat = 0.005
         
         var removeList: [UInt] = []
         for (position, var item) in renderWaveItems {
@@ -132,6 +148,10 @@ public class WJSoundWaveView: UIView {
         removeList.forEach { renderWaveItems.removeValue(forKey: $0) }
         
         setNeedsDisplay()
+        
+        if renderWaveItems.count == 0 {
+            displayLink.isPaused = true
+        }
     }
 }
 
@@ -179,7 +199,7 @@ extension WJSoundWaveView {
         
         let waveMaxH = waveH
         let waveHW = waveW / 2   // 一半的宽度
-        let midX = bounds.width*displayAreaRate/2 + CGFloat(position)*waveDistance
+        let midX = bounds.width*(1-displayAreaRate)/2 + CGFloat(position)*waveDistance
         
         let y = waveMaxH*amplitude*sin(CGFloat.pi*(1+x/waveW) + (reverse ? CGFloat.pi : 0))
         let scaling: CGFloat = pow(1-pow((x-waveHW)/waveHW, 2), narrowExp)
@@ -203,7 +223,7 @@ extension WJSoundWaveView {
         return path
     }
     
-    private func drawStripe(withWaveItem item: XTWaveItem) {
+    private func drawStripe(withWaveItem item: XJWaveItem) {
         item.color.set()
         
         let path = paraCurve(with: item.position, item.curRenderAmplitude, item.narrowExp)
@@ -212,7 +232,7 @@ extension WJSoundWaveView {
         path.stroke()
     }
     
-    private func drawHalo(withWaveItem item: XTWaveItem) {
+    private func drawHalo(withWaveItem item: XJWaveItem) {
         item.color.set()
         
         let path = paraCurve(with: item.position, item.curRenderAmplitude, item.narrowExp)
@@ -223,7 +243,7 @@ extension WJSoundWaveView {
         path.fill()
     }
     
-    private func drawPillar(withWaveItem item: XTWaveItem) {
+    private func drawPillar(withWaveItem item: XJWaveItem) {
         guard let context = UIGraphicsGetCurrentContext() else { return }
         
         let d: CGFloat = 1
@@ -236,7 +256,7 @@ extension WJSoundWaveView {
         context.fillPath()
     }
     
-    private func drawBrick(withWaveItem item: XTWaveItem) {
+    private func drawBrick(withWaveItem item: XJWaveItem) {
         item.color.set()
         let context = UIGraphicsGetCurrentContext()
         
@@ -257,7 +277,7 @@ extension WJSoundWaveView {
         context?.fillPath()
     }
     
-    private func drawTrace(withWaveItem item: XTWaveItem) {
+    private func drawTrace(withWaveItem item: XJWaveItem) {
         item.color.set()
         let context = UIGraphicsGetCurrentContext()
         
@@ -283,7 +303,7 @@ extension WJSoundWaveView {
                 }
             }
             else {
-                topPoint = CGPoint(x: bounds.width*displayAreaRate/2 + CGFloat(item.position)*waveDistance - waveW/2 + x + waveDistance/2,
+                topPoint = CGPoint(x: bounds.width*(1-displayAreaRate)/2 + CGFloat(item.position)*waveDistance - waveW/2 + x + waveDistance/2,
                                    y: bounds.midY + (-item.curRenderAmplitude/item.amplitude) * waveH)
             }
             
@@ -343,7 +363,7 @@ private extension WJSoundWaveView {
     
     func middleDash(_ space: CGFloat) -> CGPath {
         
-        let leftSpace = bounds.width*displayAreaRate/2
+        let leftSpace = bounds.width*(1-displayAreaRate)/2
         let orgX = leftSpace - CGFloat(floorf(Float(leftSpace/waveDistance)))*waveDistance
         let dashPath = CGMutablePath()
         let midY = bounds.midY
@@ -358,7 +378,7 @@ private extension WJSoundWaveView {
 
 
 /// 单个波纹的信息
-private struct XTWaveItem {
+private struct XJWaveItem {
     
     /// 振幅，用于控制波纹的高度，取值范围为[0.0, 1.0]，值越大，幅度越大，波纹高度越高
     var amplitude: CGFloat = 0.0

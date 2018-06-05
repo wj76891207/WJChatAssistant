@@ -8,6 +8,7 @@
 
 import Foundation
 
+let _blueColor = UIColor.init(red: 96/255.0, green: 143/255.0, blue: 233/255.0, alpha: 1)
 private var _onePixel: CGFloat = -1
 extension CGFloat {
     
@@ -138,3 +139,4 @@ extension UIImage {
         return newImage
     }
 }
+

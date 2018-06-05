@@ -38,6 +38,9 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
             defaultViewController.delegate = self
             defaultViewController.datasource = self
             defaultViewController.chatAssistant.speechRecognizer = WJBDSpeechManager.share
+            WJBDSpeechManager.share.setupBDSClient(withAppID: "11259614",
+                                                   appKey: "8keHE6Qqxb8rEZ0EXtq8HNeh",
+                                                   secretKey: "zStgv4t3ocdW9ApKrVQ8hBMXr2fLdxpX")
             navigationController?.pushViewController(defaultViewController, animated: true)
         }
         

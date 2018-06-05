@@ -28,7 +28,7 @@ public class WJBDSpeechManager: NSObject, BDSClientASRDelegate {
         asrEventManager?.setParameter(appID, forKey: BDS_ASR_OFFLINE_APP_CODE)
         
         //设置ModelVAD，提供较好的抗噪能力，不过速度较慢
-        let modelVADFilePath = Bundle(identifier: "www.wxchina.com.XtionChatBot")?.path(forResource: "bds_easr_basic_model", ofType: "dat")
+        let modelVADFilePath = Bundle(identifier: "www.wxchina.com.BDSpeechRecognizer")?.path(forResource: "bds_easr_basic_model", ofType: "dat")
         asrEventManager?.setParameter(modelVADFilePath, forKey: BDS_ASR_MODEL_VAD_DAT_FILE)
         asrEventManager?.setParameter(true, forKey: BDS_ASR_ENABLE_MODEL_VAD)
     }
@@ -37,30 +37,37 @@ public class WJBDSpeechManager: NSObject, BDSClientASRDelegate {
         let status = TBDVoiceRecognitionClientWorkStatus(rawValue: UInt32(workStatus))
         switch status {
         case EVoiceRecognitionClientWorkStatusStartWorkIng:
+            speechRecognizerDelegate?.wjSpeechRecognizeStart()
             break
         case EVoiceRecognitionClientWorkStatusStart:                  // 检测到用户开始说话
+            print("+++++++ Start Speak")
             break
         case EVoiceRecognitionClientWorkStatusEnd:                    // 检测到用户结束说话，并等待识别结果返回并结束录音
+            print("------- End Speak")
             break
         case EVoiceRecognitionClientWorkStatusCancel:                 // 用户取消
+            print("------- Cancel Record")
             break
         case EVoiceRecognitionClientWorkStatusError:                  // 发生错误
-            speechRecognizerDelegate?.wjSpeechRecognizerOccurError(NSError(domain: "", code: 0, userInfo: nil))
+            let error = aObj as? NSError ?? NSError(domain: "未知错误", code: 0, userInfo: nil)
+            speechRecognizerDelegate?.wjSpeechRecognizerComplate(false, error)
             break
         case EVoiceRecognitionClientWorkStatusRecorderEnd:            // 录音结束
+            print("------- End Record")
             break
             
         // 文字转换结果回调
         case EVoiceRecognitionClientWorkStatusNewRecordData:          // 录音数据回调
             break
         case EVoiceRecognitionClientWorkStatusMeterLevel:             // 当前音量回调
-            speechRecognizerDelegate?.wjSpeechRecognizerUpdateVoicePower(aObj as? Float, peakPower: nil)
-            break
-        case EVoiceRecognitionClientWorkStatusFlushData:              // 获取到部分数据回调
-            speechRecognizerDelegate?.wjSpeechRecognizerUpdateRecognitionResult(WJSpeechRecognitionResult(withBDFlushData: aObj))
-            break
-        case EVoiceRecognitionClientWorkStatusFinish:                 // 语音识别功能完成，服务器返回正确结果
-            break
+            speechRecognizerDelegate?.wjSpeechRecognizerUpdateVoicePower(nil, peakPower: aObj as? Float)
+        case EVoiceRecognitionClientWorkStatusFlushData:              // 获取到文字转换数据回调
+            let result = WJSpeechRecognitionResult(withBDFlushData: aObj, isFinal: false)
+            speechRecognizerDelegate?.wjSpeechRecognizerUpdateRecognitionResult(result)
+        case EVoiceRecognitionClientWorkStatusFinish:                 // 获取到最终的文字转换数据回调
+            let result = WJSpeechRecognitionResult(withBDFlushData: aObj, isFinal: true)
+            speechRecognizerDelegate?.wjSpeechRecognizerUpdateRecognitionResult(result)
+            speechRecognizerDelegate?.wjSpeechRecognizerComplate(true, nil)
             
         // CHUNK状态
         case EVoiceRecognitionClientWorkStatusChunkThirdData:         // CHUNK: 识别结果中的第三方数据

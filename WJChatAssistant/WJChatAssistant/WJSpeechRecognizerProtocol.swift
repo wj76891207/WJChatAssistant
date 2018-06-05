@@ -30,22 +30,36 @@ public protocol WJSpeechRecognizerProtocol {
 public protocol WJSpeechRecognizerDelegate: AnyObject {
     
     // MARK: Optional
-    func wjSpeechRecognizerUpdateVoicePower(_ averagePower: Float?, peakPower: Float?)
     
-    func wjSpeechRecognizerOccurError(_ error: NSError)
+    func wjSpeechRecognizeStart()
+    
+    func wjSpeechRecognizerUpdateVoicePower(_ averagePower: Float?, peakPower: Float?)
     
     
     // MARK: Required
     func wjSpeechRecognizerUpdateRecognitionResult(_ result: WJSpeechRecognitionResult)
+    
+    /// 语音识别结束时调用该方法
+    ///
+    /// - Parameters:
+    ///   - isSuceessful: 是否成功结束
+    ///   - error: 当非正常结束时，该参数返回错误信息
+    func wjSpeechRecognizerComplate(_ isSuceessful: Bool, _ error: NSError?)
+    
+    func wjSpeechRecognizeCancel()
 }
 
-extension WJSpeechRecognizerDelegate {
+public extension WJSpeechRecognizerDelegate {
     
-    func wjSpeechRecognizerUpdateVoicePower(_ averagePower: Float?, peakPower: Float?) {
+    func wjSpeechRecognizeStart() {
         // default do nothing
     }
     
-    func wjSpeechRecognizerOccurError(_ error: NSError) {
+    func wjSpeechRecognizeCancel() {
+        // default do nothing
+    }
+    
+    func wjSpeechRecognizerUpdateVoicePower(_ averagePower: Float?, peakPower: Float?) {
         // default do nothing
     }
 }

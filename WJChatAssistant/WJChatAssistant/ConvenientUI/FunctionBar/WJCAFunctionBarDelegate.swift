@@ -10,4 +10,12 @@ import Foundation
 
 public protocol WJCAFunctionBarDelegate: AnyObject {
     
+    func shouldStartRecording()
+    func shouldCancelRecording()
+    func shouldEndRecording()
+    
+    func shouldStartTyping()
+    func shouldCancelTyping()
+    func shouldEndTyping()
+    
 }
