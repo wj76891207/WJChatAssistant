@@ -62,11 +62,51 @@ class WJBubbleView: UIView {
         return cornerRadiu*0.5 //既是宽度，也是高度
     }
     
+    override class var layerClass: AnyClass {
+        return CAShapeLayer.self
+    }
+    
+    private var bgShapeLayer: CAShapeLayer {
+        return layer as! CAShapeLayer
+    }
+    
+    var borderColor: UIColor? {
+        get { return bgShapeLayer.strokeColor == nil ? nil : UIColor(cgColor: bgShapeLayer.strokeColor!) }
+        set { bgShapeLayer.strokeColor = newValue?.cgColor }
+    }
+    
+    var borderWidth: CGFloat {
+        get { return bgShapeLayer.lineWidth }
+        set { bgShapeLayer.lineWidth = newValue }
+    }
+    
+    private var contentView: UIView = {
+        let contentView = UIView()
+        contentView.layer.mask = CAShapeLayer()
+        return contentView
+    }()
+    
+    override func addSubview(_ view: UIView) {
+        contentView.addSubview(view)
+    }
+    
     override var frame: CGRect {
         didSet {
             if frame.size != oldValue.size {
                 updateShape()
             }
+        }
+    }
+    
+    override var backgroundColor: UIColor? {
+        get {
+            if let fillColor = bgShapeLayer.fillColor {
+                return UIColor(cgColor: fillColor)
+            }
+            return nil
+        }
+        set {
+            bgShapeLayer.fillColor = newValue?.cgColor
         }
     }
     
@@ -90,35 +130,20 @@ class WJBubbleView: UIView {
     }
     
     var contentEdgeInsets: UIEdgeInsets {
-        return UIEdgeInsets(top: cornerRadiu,
-                            left: (position == .left ? hookWidth : 0) + cornerRadiu*2/3,
-                            bottom: cornerRadiu,
-                            right: (position == .right ? hookWidth : 0) + cornerRadiu*2/3)
+        return UIEdgeInsets(top: 0, left: (position == .left ? hookWidth : 0),
+                            bottom: 0, right: (position == .right ? hookWidth : 0))
     }
-    
-//    class func contentEdgeInsets(withPosition position: Position, cornerRadiu: CGFloat = 15, hookWidth: CGFloat = 7.5) -> UIEdgeInsets {
-//        return UIEdgeInsets(top: cornerRadiu,
-//                            left: (position == .left ? hookWidth : 0) + cornerRadiu*2/3,
-//                            bottom: cornerRadiu,
-//                            right: (position == .right ? hookWidth : 0) + cornerRadiu*2/3)
-//    }
+
     
     // 气泡建议的最大最小尺寸
     static var suggestedMinSize = CGSize(width: 60, height: 40)
     static var suggestedMaxSize = CGSize(width: (UIScreen.main.bounds.width*0.6).flat,
                                          height: (UIScreen.main.bounds.height*0.6).flat)
     
-//    class func size(withContent content: Any,
-//                    position: Position,
-//                    constraintSize: CGSize? = nil,
-//                    cornerRadiu: CGFloat = 15,
-//                    hookWidth: CGFloat = 7.5) -> CGSize {
-//        return suggestedMinSize
-//    }
-    
     init(frame: CGRect, position: Position = .left) {
         super.init(frame: frame)
         self.position = position
+        super.addSubview(contentView)
         updateShape()
     }
     
@@ -131,8 +156,10 @@ class WJBubbleView: UIView {
     }
     
     private func updateShape() {
-        
-        let maskLayer = CAShapeLayer()
+//        guard let maskLayer = layer.mask as? CAShapeLayer else {
+//            return
+//        }
+
         let maskPath = CGMutablePath()
 
         let hookOffset = cornerRadiu*0.15 //为了视觉上更好看，适当加高高度
@@ -186,10 +213,15 @@ class WJBubbleView: UIView {
                         tangent2End: CGPoint(x: (position == .left ? hookWidth : 0), y: bounds.height-cornerRadiu), radius: cornerRadiu)
         
         maskPath.closeSubpath()
-        
-        maskLayer.path = maskPath
-        layer.mask = maskLayer
+        (layer as? CAShapeLayer)?.path = maskPath
+        (contentView.layer.mask as? CAShapeLayer)?.path = maskPath
         
         setNeedsLayout()
+    }
+    
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        
+        contentView.frame = bounds
     }
 }

@@ -11,20 +11,20 @@ import Foundation
 private let avatarSize: CGFloat = 40
 private let marginBetweenAvatarAndBubble: CGFloat = 6
 
-protocol WJCADialogMessageBubbleViewProtocol {
-    
-    /// 是否显示头像
-    var showAvatar: Bool { get set }
-    
-    /// 头像图片
-    var avatar: UIImage? { get set }
-    
-    var bubbleView: WJBubbleView? { get }
-    
-    func update(withMessage msg: WJCADialogMessage)
-}
+//protocol WJCADialogMessageBubbleViewProtocol {
+//
+//    /// 是否显示头像
+//    var showAvatar: Bool { get set }
+//
+//    /// 头像图片
+//    var avatar: UIImage? { get set }
+//
+//    var bubbleView: WJBubbleView? { get }
+//
+//    func update(withMessage msg: WJCADialogMessage)
+//}
 
-class WJCADialogMessageCell: UICollectionViewCell, WJCADialogMessageBubbleViewProtocol {
+class WJCADialogMessageCell: UICollectionViewCell {
     
     var showAvatar: Bool = true {
         didSet {
@@ -62,6 +62,23 @@ class WJCADialogMessageCell: UICollectionViewCell, WJCADialogMessageBubbleViewPr
         return _defUserAvatar
     }
     
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        
+        if let bubbleView = bubbleView {
+            contentView.addSubview(bubbleView)
+        }
+        updateAvatar()
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+//    override func apply(_ layoutAttributes: UICollectionViewLayoutAttributes) {
+//
+//    }
+    
     func update(withMessage msg: WJCADialogMessage) {
         bubbleView?.skinType = msg.skinType
         bubbleView?.position = msg.position
@@ -93,13 +110,10 @@ class WJCADialogMessageCell: UICollectionViewCell, WJCADialogMessageBubbleViewPr
         return width - avatarSize - marginBetweenAvatarAndBubble - (includeHook ? 0 : (bubbleView?.hookWidth ?? 0))
     }
     
-    /// subclass should call this at the end of init
-    func didInitialized() {
-        if let bubbleView = bubbleView {
-            contentView.addSubview(bubbleView)
-        }
-        updateAvatar()
-    }
+//    /// subclass should call this at the end of init
+//    func didInitialized() {
+//
+//    }
     
     private func updateAvatar() {
         if showAvatar && avatarView == nil {
@@ -140,19 +154,11 @@ class WJCADialogMessageCell: UICollectionViewCell, WJCADialogMessageBubbleViewPr
 
 class WJCADialogTextMessageCell: WJCADialogMessageCell {
     
+    override lazy var bubbleView: WJBubbleView? = {
+        return WJTextBubbleView(frame: bounds)
+    }()
+    
     fileprivate var textBubbleView: WJTextBubbleView { return bubbleView as! WJTextBubbleView }
-    
-    override init(frame: CGRect) {
-
-        super.init(frame: frame)
-
-        bubbleView = WJTextBubbleView(frame: CGRect(x: 0, y: 0, width: frame.width, height: frame.height))
-        didInitialized()
-    }
-    
-    required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
     
     override func update(withMessage msg: WJCADialogMessage) {
         super.update(withMessage: msg)
@@ -163,20 +169,10 @@ class WJCADialogTextMessageCell: WJCADialogMessageCell {
 
 class WJCADialogImageMessageCell: WJCADialogMessageCell {
     
+    override lazy var bubbleView: WJBubbleView? = {
+        return WJImageBubbleView(frame: bounds)
+    }()
     private var imageBubbleView: WJImageBubbleView { return bubbleView as! WJImageBubbleView }
-    
-    override init(frame: CGRect) {
-        
-        super.init(frame: frame)
-    
-        bubbleView = WJImageBubbleView(frame: CGRect(x: 0, y: 0, width: frame.width, height: frame.height))
-        
-        didInitialized()
-    }
-    
-    required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
     
     override func update(withMessage msg: WJCADialogMessage) {
         super.update(withMessage: msg)
@@ -189,9 +185,13 @@ class WJCADialogOptionsMessageCell: WJCADialogTextMessageCell {
     private var optionsButtonView = WJButtonGroup()
     private let marginOfTitleAndOptions: CGFloat = 5
     
-    override func didInitialized() {
-        super.didInitialized()
-        addSubview(optionsButtonView)
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        contentView.addSubview(optionsButtonView)
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
     
     override func update(withMessage msg: WJCADialogMessage) {
@@ -209,6 +209,10 @@ class WJCADialogOptionsMessageCell: WJCADialogTextMessageCell {
     }
     
     override func sizeThatFits(_ size: CGSize) -> CGSize {
+        guard let bubbleView = bubbleView, !bubbleView.isProcessing else {
+            return super.sizeThatFits(size)
+        }
+        
         let titleAreaSize = super.sizeThatFits(size)
         let optionAreaSize = optionButtonViewSizeThatFits(size)
         
@@ -235,6 +239,25 @@ class WJCADialogOptionsMessageCell: WJCADialogTextMessageCell {
                                          width: optionAreaSize.width,
                                          height: optionAreaSize.height)
     }
+}
+
+
+class WJCADialogOptionListMessageCell: WJCADialogTextMessageCell {
+    
+    override lazy var bubbleView: WJBubbleView? = {
+        return WJOptionListBubbleView(frame: bounds)
+    }()
+    private var optionListBubbleView: WJOptionListBubbleView { return bubbleView as! WJOptionListBubbleView }
+    
+    override func update(withMessage msg: WJCADialogMessage) {
+        super.update(withMessage: msg)
+        
+        if let content = msg.content as? WJCADialogOptionMessageContent {
+            optionListBubbleView.text = content.title
+            optionListBubbleView.optionalTitles = content.options
+        }
+    }
+    
 }
 
 

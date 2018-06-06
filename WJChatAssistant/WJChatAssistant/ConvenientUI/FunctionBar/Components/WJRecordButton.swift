@@ -87,6 +87,8 @@ class WJRecordButton: UIControl {
     private func updateShape(forStatus status: Status) {
         
         func _animatedStokeHead(to newPath: CGPath) {
+            head.removeAllAnimations()
+
             let anim = CASpringAnimation(keyPath: "path")
             anim.fromValue = head.path
             anim.toValue = newPath
@@ -97,6 +99,8 @@ class WJRecordButton: UIControl {
         }
         
         func _animatedStokeTorus(_ isShow: Bool) {
+            torus.removeAllAnimations()
+
             let anim1 = CABasicAnimation(keyPath: "strokeStart")
             anim1.fromValue = torus.strokeStart
             anim1.toValue = isShow ? 0 : 0.5
@@ -120,6 +124,8 @@ class WJRecordButton: UIControl {
         }
         
         func _animatedStokeStem(_ isShow: Bool) {
+            stem.removeAllAnimations()
+            
             let anim = CABasicAnimation(keyPath: "strokeStart")
             anim.fromValue = stem.strokeStart
             anim.toValue = isShow ? 0 : 1

@@ -106,6 +106,7 @@ public class WJCAFunctionBar: UIView {
     func startRecording() {
         showRecordingView()
         // 由于按钮被移动到了新的view上，立刻加上的动画会被清除，所以暂时先延迟一点执行
+        // FIXME: 不能这么做，有bug
         DispatchQueue.main.asyncAfter(deadline: .now()+0.02, execute: {
             self.recordBtn.stauts = .recording
         })

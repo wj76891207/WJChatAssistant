@@ -28,6 +28,8 @@
 		C9B1FA5420C515CD00836AF5 /* WJCARecordingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9B1FA5320C515CD00836AF5 /* WJCARecordingViewController.swift */; };
 		C9B1FA5620C515E500836AF5 /* WJCATypingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9B1FA5520C515E500836AF5 /* WJCATypingViewController.swift */; };
 		C9B1FA5820C5347E00836AF5 /* images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C9B1FA5720C5347E00836AF5 /* images.xcassets */; };
+		C9B9AF8E20C7722B0079C4B7 /* DefaultSpeechRecognizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9B9AF8D20C7722B0079C4B7 /* DefaultSpeechRecognizer.swift */; };
+		C9B9AF9620C78B170079C4B7 /* WJOptionListBubbleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9B9AF9520C78B170079C4B7 /* WJOptionListBubbleView.swift */; };
 		C9BB2A0E20BD578200C78746 /* WJCADialogMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9BB2A0D20BD578200C78746 /* WJCADialogMessage.swift */; };
 		C9C9590720B7EF5C00E72454 /* WJChatAssistant.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C9C958FD20B7EF5C00E72454 /* WJChatAssistant.framework */; };
 		C9C9590C20B7EF5C00E72454 /* WJChatAssistantTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9C9590B20B7EF5C00E72454 /* WJChatAssistantTests.swift */; };
@@ -101,7 +103,6 @@
 		C9C959D720B7FBFD00E72454 /* libBaiduSpeechSDK.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C9C959D620B7FBFD00E72454 /* libBaiduSpeechSDK.a */; };
 		C9C959D920B7FC8D00E72454 /* WJChatAssistant.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9C959D820B7FC8D00E72454 /* WJChatAssistant.swift */; };
 		C9C959DC20B7FD7A00E72454 /* WJCADialogView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9C959DB20B7FD7A00E72454 /* WJCADialogView.swift */; };
-		C9C959DF20B7FDD300E72454 /* DefaultSpeechRecognizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9C959DE20B7FDD300E72454 /* DefaultSpeechRecognizer.swift */; };
 		C9C959E120B800D300E72454 /* WJSpeechRecognizerProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9C959E020B800D300E72454 /* WJSpeechRecognizerProtocol.swift */; };
 		C9C959E320B800E600E72454 /* WJIntentRecognizerProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9C959E220B800E600E72454 /* WJIntentRecognizerProtocol.swift */; };
 		C9C959E520B8013100E72454 /* WJChatAssistantDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9C959E420B8013100E72454 /* WJChatAssistantDelegate.swift */; };
@@ -169,6 +170,9 @@
 		C9B1FA5320C515CD00836AF5 /* WJCARecordingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WJCARecordingViewController.swift; sourceTree = "<group>"; };
 		C9B1FA5520C515E500836AF5 /* WJCATypingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WJCATypingViewController.swift; sourceTree = "<group>"; };
 		C9B1FA5720C5347E00836AF5 /* images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = images.xcassets; sourceTree = "<group>"; };
+		C9B9AF8D20C7722B0079C4B7 /* DefaultSpeechRecognizer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DefaultSpeechRecognizer.swift; sourceTree = "<group>"; };
+		C9B9AF8F20C7726E0079C4B7 /* Speech.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Speech.framework; path = System/Library/Frameworks/Speech.framework; sourceTree = SDKROOT; };
+		C9B9AF9520C78B170079C4B7 /* WJOptionListBubbleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WJOptionListBubbleView.swift; sourceTree = "<group>"; };
 		C9BB2A0D20BD578200C78746 /* WJCADialogMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WJCADialogMessage.swift; sourceTree = "<group>"; };
 		C9C958FD20B7EF5C00E72454 /* WJChatAssistant.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = WJChatAssistant.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		C9C9590020B7EF5C00E72454 /* WJChatAssistant.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WJChatAssistant.h; sourceTree = "<group>"; };
@@ -245,7 +249,6 @@
 		C9C959D620B7FBFD00E72454 /* libBaiduSpeechSDK.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libBaiduSpeechSDK.a; path = BDSpeechRecognizer/BDSClientLib/libBaiduSpeechSDK.a; sourceTree = "<group>"; };
 		C9C959D820B7FC8D00E72454 /* WJChatAssistant.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WJChatAssistant.swift; sourceTree = "<group>"; };
 		C9C959DB20B7FD7A00E72454 /* WJCADialogView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WJCADialogView.swift; sourceTree = "<group>"; };
-		C9C959DE20B7FDD300E72454 /* DefaultSpeechRecognizer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefaultSpeechRecognizer.swift; sourceTree = "<group>"; };
 		C9C959E020B800D300E72454 /* WJSpeechRecognizerProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WJSpeechRecognizerProtocol.swift; sourceTree = "<group>"; };
 		C9C959E220B800E600E72454 /* WJIntentRecognizerProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WJIntentRecognizerProtocol.swift; sourceTree = "<group>"; };
 		C9C959E420B8013100E72454 /* WJChatAssistantDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WJChatAssistantDelegate.swift; sourceTree = "<group>"; };
@@ -333,6 +336,7 @@
 				C9AEE43120BBF00900FC24F7 /* WJBubbleView.swift */,
 				C9AEE43320BBF02D00FC24F7 /* WJTextBubbleView.swift */,
 				C9AEE43520BBF04100FC24F7 /* WJImageBubbleView.swift */,
+				C9B9AF9520C78B170079C4B7 /* WJOptionListBubbleView.swift */,
 				C9AB7BC320BFA5FE00EF4451 /* WJMarbleLoadingView.swift */,
 				C9AB7BC520BFDE8B00EF4451 /* WJButtonGroup.swift */,
 			);
@@ -380,7 +384,6 @@
 				C9C959E420B8013100E72454 /* WJChatAssistantDelegate.swift */,
 				C9C959E020B800D300E72454 /* WJSpeechRecognizerProtocol.swift */,
 				C9C959E220B800E600E72454 /* WJIntentRecognizerProtocol.swift */,
-				C9C959DD20B7FDA000E72454 /* DefaultSpeechRecognizer */,
 				C9C959DA20B7FCEE00E72454 /* ConvenientUI */,
 				C9C9590120B7EF5C00E72454 /* Info.plist */,
 			);
@@ -402,6 +405,7 @@
 				C9C9591D20B7F09B00E72454 /* AppDelegate.swift */,
 				C9C9591F20B7F09B00E72454 /* ViewController.swift */,
 				C9C9593F20B7F93C00E72454 /* MSLuisIntentRecognizer.swift */,
+				C9B9AF8D20C7722B0079C4B7 /* DefaultSpeechRecognizer.swift */,
 				C9C9592120B7F09B00E72454 /* Main.storyboard */,
 				C9C9592420B7F09B00E72454 /* Assets.xcassets */,
 				C9C9592620B7F09B00E72454 /* LaunchScreen.storyboard */,
@@ -547,6 +551,7 @@
 		C9C959C120B7FB1E00E72454 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				C9B9AF8F20C7726E0079C4B7 /* Speech.framework */,
 				C9C959D620B7FBFD00E72454 /* libBaiduSpeechSDK.a */,
 				C9C959D420B7FBA300E72454 /* libc++.tbd */,
 				C9C959D220B7FB9900E72454 /* libz.1.2.5.tbd */,
@@ -574,14 +579,6 @@
 				C9AEE41820BB9D5B00FC24F7 /* FunctionBar */,
 			);
 			path = ConvenientUI;
-			sourceTree = "<group>";
-		};
-		C9C959DD20B7FDA000E72454 /* DefaultSpeechRecognizer */ = {
-			isa = PBXGroup;
-			children = (
-				C9C959DE20B7FDD300E72454 /* DefaultSpeechRecognizer.swift */,
-			);
-			path = DefaultSpeechRecognizer;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -819,6 +816,7 @@
 				C9AB7BC620BFDE8B00EF4451 /* WJButtonGroup.swift in Sources */,
 				C9B1FA5420C515CD00836AF5 /* WJCARecordingViewController.swift in Sources */,
 				C9AEE42120BB9E9200FC24F7 /* WJCAFunctionBar.swift in Sources */,
+				C9B9AF9620C78B170079C4B7 /* WJOptionListBubbleView.swift in Sources */,
 				C9C959E320B800E600E72454 /* WJIntentRecognizerProtocol.swift in Sources */,
 				C9AEE42E20BBEE4100FC24F7 /* WJCADialogViewLayout.swift in Sources */,
 				C9C959E120B800D300E72454 /* WJSpeechRecognizerProtocol.swift in Sources */,
@@ -838,7 +836,6 @@
 				C9C959E920B8020A00E72454 /* WJCADialogViewDataSource.swift in Sources */,
 				C9B1FA4C20C500C000836AF5 /* WJRecordingView.swift in Sources */,
 				C9AEE43420BBF02D00FC24F7 /* WJTextBubbleView.swift in Sources */,
-				C9C959DF20B7FDD300E72454 /* DefaultSpeechRecognizer.swift in Sources */,
 				C9C959D920B7FC8D00E72454 /* WJChatAssistant.swift in Sources */,
 				C9AEE43220BBF00900FC24F7 /* WJBubbleView.swift in Sources */,
 				C9AEE41D20BB9DA900FC24F7 /* WJCAViewControllerDelegate.swift in Sources */,
@@ -859,6 +856,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				C9C9592020B7F09B00E72454 /* ViewController.swift in Sources */,
+				C9B9AF8E20C7722B0079C4B7 /* DefaultSpeechRecognizer.swift in Sources */,
 				C9C9591E20B7F09B00E72454 /* AppDelegate.swift in Sources */,
 				C9C9594020B7F93C00E72454 /* MSLuisIntentRecognizer.swift in Sources */,
 			);
@@ -1038,7 +1036,7 @@
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				INFOPLIST_FILE = WJChatAssistant/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = www.wxchina.com.WJChatAssistant;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
@@ -1062,7 +1060,7 @@
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				INFOPLIST_FILE = WJChatAssistant/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = www.wxchina.com.WJChatAssistant;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";

@@ -33,6 +33,20 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        MSLuisIntentRecognizer.share.recognize(text: "我要打卡") { (intent, error) in
+            
+        }
+        
+        MSLuisIntentRecognizer.share.recognize(text: "王小花") { (intent, error) in
+            
+        }
+        
+        MSLuisIntentRecognizer.share.recognize(text: "请假") { (intent, error) in
+            
+        }
+        
+        return
+        
         if indexPath.row == 0 {
             let defaultViewController = WJCAViewController()
             defaultViewController.delegate = self

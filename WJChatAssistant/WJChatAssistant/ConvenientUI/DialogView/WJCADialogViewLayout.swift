@@ -87,6 +87,10 @@ extension WJCADialogViewLayout {
         return msgViewSizes[index] ?? WJBubbleView.suggestedMinSize
     }
     
+    func invalidateMsgViewSize(at index: Int) {
+        msgViewSizes[index] = nil
+    }
+    
     func updateMsgViewSize(_ size: CGSize, at index: Int, with position: WJBubbleView.Position) {
         msgViewSizes[index] = size
         

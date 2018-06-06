@@ -13,8 +13,10 @@ class WJMarbleLoadingView: UIView {
     private var marbleNumber: Int
     private var marbles: [CAShapeLayer] = []
     
+    // the variable below in charge of the jumping frequency and speed
     private let jumpTime: TimeInterval = 0.25
     private let restTime: TimeInterval = 0.5
+    private let jumpInterval: TimeInterval = 0.25/3
     
     private let marbleSize = CGSize(width: 7, height: 7)
     private var jumpingTimer: Timer?
@@ -42,29 +44,12 @@ class WJMarbleLoadingView: UIView {
     
     func startJumping() {
         
-        let jumpInterval = jumpTime/3
         let timeInterval = jumpTime + restTime + (Double(marbleNumber)-1)*jumpInterval
-        jumpingTimer = Timer.init(timeInterval: timeInterval, repeats: true) { [weak self] _ in
-            guard let strongSelf = self else { return }
-            
-            var delayTime: TimeInterval = 0
-            for marble in strongSelf.marbles {
-                
-                DispatchQueue.main.asyncAfter(deadline: .now()+delayTime, execute: {
-                    let animation = CAKeyframeAnimation(keyPath: "position.y")
-                    animation.duration = strongSelf.jumpTime
-                    animation.values = [strongSelf.bounds.midY,
-                                        strongSelf.bounds.midY/3,
-                                        strongSelf.bounds.midY]
-                    animation.timingFunctions = [CAMediaTimingFunction(name: kCAMediaTimingFunctionEaseIn),
-                                                 CAMediaTimingFunction(name: kCAMediaTimingFunctionEaseOut)]
-                    marble.add(animation, forKey: nil)
-                })
-                
-                delayTime += jumpInterval
-            }
-        }
-        
+        jumpingTimer = Timer.init(timeInterval: timeInterval,
+                                  target: self,
+                                  selector: #selector(jumpTimingAction(_:)),
+                                  userInfo: nil,
+                                  repeats: true)
         RunLoop.main.add(jumpingTimer!, forMode: .commonModes)
         jumpingTimer?.fire()
     }
@@ -72,6 +57,24 @@ class WJMarbleLoadingView: UIView {
     func stopJumping() {
         jumpingTimer?.invalidate()
         jumpingTimer = nil
+    }
+    
+    @objc private func jumpTimingAction(_ timer: Timer) {
+        var delayTime: TimeInterval = 0
+        for marble in marbles {
+            DispatchQueue.main.asyncAfter(deadline: .now()+delayTime, execute: {
+                let animation = CAKeyframeAnimation(keyPath: "position.y")
+                animation.duration = self.jumpTime
+                animation.values = [self.bounds.midY,
+                                    self.bounds.midY/3,
+                                    self.bounds.midY]
+                animation.timingFunctions = [CAMediaTimingFunction(name: kCAMediaTimingFunctionEaseIn),
+                                             CAMediaTimingFunction(name: kCAMediaTimingFunctionEaseOut)]
+                marble.add(animation, forKey: nil)
+            })
+            
+            delayTime += jumpInterval
+        }
     }
     
     override func tintColorDidChange() {

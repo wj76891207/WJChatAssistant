@@ -9,6 +9,7 @@
 import Foundation
 import Speech
 import Accelerate
+import WJChatAssistant
 
 extension WJSpeechRecognitionResult {
     
@@ -38,7 +39,7 @@ class DefaultSpeechRecognizer: WJSpeechRecognizerProtocol {
     
 }
 
-public class ViewController: UIViewController, SFSpeechRecognizerDelegate {
+public class TestViewController: UIViewController, SFSpeechRecognizerDelegate {
     // MARK: Properties
     
     private let speechRecognizer = SFSpeechRecognizer(locale: Locale(identifier: "en-US"))!

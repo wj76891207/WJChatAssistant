@@ -14,10 +14,7 @@ public class WJChatAssistant {
     public static let `default` = WJChatAssistant()
     
     /// 语音识别器，默认使用系统的语音识别库
-    public lazy var speechRecognizer: WJSpeechRecognizerProtocol = {
-        let defRecognizer = DefaultSpeechRecognizer()
-        return defRecognizer
-    }()
+    public var speechRecognizer: WJSpeechRecognizerProtocol?
     
     /// 语义识别器
     public var intentRecognizer: WJIntentRecognizerProtocol? = nil
@@ -32,15 +29,15 @@ public class WJChatAssistant {
     // MARK: - Public Functions
     
     public func startListen() {
-        speechRecognizer.startListen(withDelegate: self)
+        speechRecognizer?.startListen(withDelegate: self)
     }
     
     public func stopListen() {
-        speechRecognizer.stopListen()
+        speechRecognizer?.stopListen()
     }
     
     public func cancelListen() {
-        speechRecognizer.cancelListen()
+        speechRecognizer?.cancelListen()
     }
     
 }

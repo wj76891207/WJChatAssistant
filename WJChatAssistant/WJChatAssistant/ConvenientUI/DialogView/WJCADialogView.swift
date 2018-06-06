@@ -15,7 +15,7 @@ public class WJCADialogView: UIView {
         .text: WJCADialogTextMessageCell.self,
         .image: WJCADialogImageMessageCell.self,
         .options: WJCADialogOptionsMessageCell.self,
-        .optionsList: WJCADialogOptionsMessageCell.self
+        .optionsList: WJCADialogOptionListMessageCell.self
     ]
     
     private lazy var layout: WJCADialogViewLayout = {
@@ -64,6 +64,34 @@ public class WJCADialogView: UIView {
         let total = msgListView.numberOfItems(inSection: 0)
         msgListView.insertItems(at: [IndexPath(row: total, section: 0)])
     }
+    
+    public func updateMsg(at index: Int) {
+        layout.invalidateMsgViewSize(at: index)
+        
+        guard let msg = dataSource?.dialogView(self, messageAtIndex: index) else { return }
+        guard let cell = msgListView.cellForItem(at: IndexPath(item: index, section: 0)) as? WJCADialogMessageCell else { return }
+        
+        updateContent(forCell: cell, with: msg, at: index)
+    }
+    
+    private func updateContent(forCell cell: WJCADialogMessageCell, with msg: WJCADialogMessage, at index: Int) {
+
+        cell.update(withMessage: msg)
+        
+        if layout.msgViewSize(at: index) == nil {
+            let fitSize = cell.sizeThatFits(layout.maxCellSize(forContentType: msg.contentType))
+            layout.updateMsgViewSize(fitSize, at: index, with: msg.position)
+            
+            if index == self.collectionView(msgListView, numberOfItemsInSection: 0) - 1 {
+                let invalidationContext = UICollectionViewLayoutInvalidationContext.init()
+                invalidationContext.invalidateItems(at: [IndexPath.init(item: index, section: 0)])
+                layout.invalidateLayout(with: invalidationContext)
+            }
+            else {
+                layout.invalidateLayout()
+            }
+        }
+    }
 }
 
 extension WJCADialogView: UICollectionViewDataSource {
@@ -84,27 +112,30 @@ extension WJCADialogView: UICollectionViewDataSource {
         
 //        print("---- get cell at \(indexPath.row)")
         
-        msgCell.update(withMessage: msg)
-        if layout.msgViewSize(at: indexPath.row) == nil {
-            let fitSize = msgCell.sizeThatFits(layout.maxCellSize(forContentType: msg.contentType))
-            layout.updateMsgViewSize(fitSize, at: indexPath.row, with: msg.position)
-            
-            if indexPath.row == self.collectionView(collectionView, numberOfItemsInSection: 0) - 1 {
-                let invalidationContext = UICollectionViewLayoutInvalidationContext.init()
-                invalidationContext.invalidateItems(at: [indexPath])
-                layout.invalidateLayout(with: invalidationContext)
-            }
-            else {
-                layout.invalidateLayout()
-            }
-            
-//            print("---- invalidateLayout")
-        }
+        updateContent(forCell: msgCell, with: msg, at: indexPath.row)
+//        msgCell.update(withMessage: msg)
+//        if layout.msgViewSize(at: indexPath.row) == nil {
+//            let fitSize = msgCell.sizeThatFits(layout.maxCellSize(forContentType: msg.contentType))
+//            layout.updateMsgViewSize(fitSize, at: indexPath.row, with: msg.position)
+//
+//            if indexPath.row == self.collectionView(collectionView, numberOfItemsInSection: 0) - 1 {
+//                let invalidationContext = UICollectionViewLayoutInvalidationContext.init()
+//                invalidationContext.invalidateItems(at: [indexPath])
+//                layout.invalidateLayout(with: invalidationContext)
+//            }
+//            else {
+//                layout.invalidateLayout()
+//            }
+//
+////            print("---- invalidateLayout")
+//        }
         
         return msgCell
     }
     
-   
+    public func collectionView(_ collectionView: UICollectionView, shouldSelectItemAt indexPath: IndexPath) -> Bool {
+        return false
+    }
     
 }
 
