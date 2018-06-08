@@ -8,7 +8,7 @@
 
 import Foundation
 
-public class WJCAViewController: UIViewController {
+open class WJCAViewController: UIViewController {
     
     public let chatAssistant = WJChatAssistant.default
     public weak var delegate: WJCAViewControllerDelegate? = nil
@@ -129,7 +129,7 @@ public class WJCAViewController: UIViewController {
     private var speechRecognitionResult: WJSpeechRecognitionResult? = nil
     
     // MARK: - Life cycle
-    public override func viewDidLoad() {
+    open override func viewDidLoad() {
         super.viewDidLoad()
         
         chatAssistant.delegate = self
@@ -189,14 +189,31 @@ extension WJCAViewController: WJChatAssistantDelegate {
             messages.append(msg1)
             dialogView.appendMsg()
             
-            DispatchQueue.main.asyncAfter(deadline: .now() + 3, execute: {
+            chatAssistant.intentRecognizer?.recognize(text: speechRecognitionResult.bestTranscription) {
+                (intent, error) in
+                guard let intent = intent else { return }
+                
                 let index = self.messages.count-1
-                var msg = self.messages[index]
-                msg.status = .normal
-                msg.content = WJCADialogOptionMessageContent(title: "我找到了以下选项", options: ["我比较短", "uuuuu", "222222"])
+                let isIntentClear = intent.topScoringIntent.score >= 0.85
+                var msg = WJCADialogMessage()
+                msg.speaker = self.messages[index].speaker
+                if isIntentClear {
+                    msg.contentType = .options
+                    msg.content = WJCADialogOptionMessageContent(title: "👌，没问题。", options: [intent.topScoringIntent.intent])
+                }
+                else {
+                    msg.contentType = .optionsList
+                    let top5 = Array(intent.intents.prefix(5))
+                    msg.content = WJCADialogOptionMessageContent(title: "你是想：", options: top5.map({ (intent) -> String in
+                        return intent.intent
+                    }))
+                }
                 self.messages[index] = msg
+                
+                DispatchQueue.main.async {
                 self.dialogView.updateMsg(at: index)
-            })
+                }
+            }
         }
     }
     
@@ -227,6 +244,12 @@ extension WJCAViewController: WJCADialogViewDataSource {
 // MARK: - WJCADialogViewDelagate
 extension WJCAViewController: WJCADialogViewDelagate {
     
+    public func didSelectOption(inMessage msgIndex: Int, at optionIndex: Int) {
+        guard let content = messages[msgIndex].content as? WJCADialogOptionMessageContent else {
+            return
+        }
+        delegate?.needExcusIntent(content.options[optionIndex])
+    }
 }
 
 // MARK: - WJCAFunctionBarDatasource
@@ -241,7 +264,9 @@ extension WJCAViewController: WJCAFunctionBarDelegate {
     public func shouldStartRecording() {
         speechRecognitionResult = nil
         funtionBar.startRecording()
+        if !isSimulator() {
         chatAssistant.startListen()
+    }
     }
     
     public func shouldCancelRecording() {
@@ -250,11 +275,13 @@ extension WJCAViewController: WJCAFunctionBarDelegate {
     }
     
     public func shouldEndRecording() {
-        chatAssistant.stopListen()
         
         if isSimulator() {
-            speechRecognitionResult = WJSpeechRecognitionResult(bestTranscription: "你好", transcriptions: ["你好"], isFinal: true)
+            let msg = messages.count > 1 ? "你好" : "我要上班打卡"
+            speechRecognitionResult = WJSpeechRecognitionResult(bestTranscription: msg, transcriptions: ["你好"], isFinal: true)
             wjChatAssistantSpeechRecognizeComplate(true, nil)
+        } else {
+            chatAssistant.stopListen()
         }
     }
     

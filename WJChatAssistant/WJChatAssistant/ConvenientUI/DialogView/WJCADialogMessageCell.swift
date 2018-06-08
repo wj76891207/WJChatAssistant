@@ -180,7 +180,13 @@ class WJCADialogImageMessageCell: WJCADialogMessageCell {
     }
 }
 
+protocol WJCADialogOptionsMessageCellDelegate: class {
+    func didSelectOption(in cell: WJCADialogMessageCell, at index: Int)
+}
+
 class WJCADialogOptionsMessageCell: WJCADialogTextMessageCell {
+    
+    weak var delegate: WJCADialogOptionsMessageCellDelegate? = nil
     
     private var optionsButtonView = WJButtonGroup()
     private let marginOfTitleAndOptions: CGFloat = 5
@@ -188,6 +194,13 @@ class WJCADialogOptionsMessageCell: WJCADialogTextMessageCell {
     override init(frame: CGRect) {
         super.init(frame: frame)
         contentView.addSubview(optionsButtonView)
+        
+        optionsButtonView.buttonClickHandler = { [weak self] (index) in
+            guard let strongSelf = self else {
+                return
+            }
+            strongSelf.delegate?.didSelectOption(in: strongSelf, at: index)
+        }
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -244,8 +257,17 @@ class WJCADialogOptionsMessageCell: WJCADialogTextMessageCell {
 
 class WJCADialogOptionListMessageCell: WJCADialogTextMessageCell {
     
+    weak var delegate: WJCADialogOptionsMessageCellDelegate? = nil
+    
     override lazy var bubbleView: WJBubbleView? = {
-        return WJOptionListBubbleView(frame: bounds)
+        let view = WJOptionListBubbleView(frame: bounds)
+        view.optionSelectHandler = { [weak self] (index) in
+            guard let strongSelf = self else {
+                return
+            }
+            strongSelf.delegate?.didSelectOption(in: strongSelf, at: index)
+        }
+        return view
     }()
     private var optionListBubbleView: WJOptionListBubbleView { return bubbleView as! WJOptionListBubbleView }
     

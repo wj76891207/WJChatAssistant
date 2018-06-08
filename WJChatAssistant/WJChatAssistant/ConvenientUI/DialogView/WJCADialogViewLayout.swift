@@ -12,6 +12,9 @@ class WJCADialogViewLayout: UICollectionViewLayout {
     
     weak var dialogView: WJCADialogView? = nil
     
+    var reloadCells: [IndexPath: CGRect] = [:]
+    
+    
     override func prepare() {
         super.prepare()
         
@@ -43,9 +46,14 @@ class WJCADialogViewLayout: UICollectionViewLayout {
         guard let dialogView = dialogView else { return att }
         guard let msg = dialogView.dataSource?.dialogView(dialogView, messageAtIndex: itemIndexPath.item) else { return att }
         
+        if let oldFrame = reloadCells[itemIndexPath] {
+            att.frame = oldFrame
+            reloadCells.removeValue(forKey: itemIndexPath)
+        } else {
         let offsetX = msg.position == .right ? dialogView.frame.width-att.frame.minX : -att.frame.maxX
         att.frame = att.frame.offsetBy(dx: offsetX, dy: 0)
         att.alpha = 0.0
+        }
         
         return att
     }
@@ -66,7 +74,7 @@ class WJCADialogViewLayout: UICollectionViewLayout {
     /// 记录所有已经根据内容计算好尺寸的cell的尺寸
     private var msgViewSizes: [Int: CGSize] = [:]
     /// 记录当前所有cell的frame，包括已经计算，和未计算并使用预估值的
-    private var msgViewFrames: [CGRect] = []
+    var msgViewFrames: [CGRect] = []
     
     private let marginBetweenMsg: CGFloat = 20
     private let marginToBorder: CGFloat = 15
@@ -111,6 +119,11 @@ extension WJCADialogViewLayout {
             for curIndex in index+1 ..< msgViewFrames.count {
                 msgViewFrames[curIndex] = msgViewFrames[curIndex].offsetBy(dx: 0, dy: offsetY)
             }
+        }
+        
+        if let frame = msgViewFrames.last, let offset = collectionView?.contentInset.bottom {
+//            collectionView?.scrollToItem(at: IndexPath.init(item: index, section: 0), at: .bottom, animated: true)
+            collectionView?.scrollRectToVisible(frame.offsetBy(dx: 0, dy: offset), animated: true)
         }
     }
     

@@ -18,13 +18,13 @@ public class WJCADialogView: UIView {
         .optionsList: WJCADialogOptionListMessageCell.self
     ]
     
-    private lazy var layout: WJCADialogViewLayout = {
+    lazy var layout: WJCADialogViewLayout = {
         let layout = WJCADialogViewLayout()
         layout.dialogView = self
         return layout
     }()
     
-    private lazy var msgListView: UICollectionView = {
+    lazy var msgListView: UICollectionView = {
         let collectionView = UICollectionView(frame: bounds, collectionViewLayout: layout)
         collectionView.backgroundColor = UIColor.white
         collectionView.dataSource = self
@@ -66,12 +66,17 @@ public class WJCADialogView: UIView {
     }
     
     public func updateMsg(at index: Int) {
+        layout.reloadCells[IndexPath(item: index, section: 0)] = layout.msgViewFrames[index]
         layout.invalidateMsgViewSize(at: index)
+        msgListView.reloadItems(at: [IndexPath(item: index, section: 0)])
         
-        guard let msg = dataSource?.dialogView(self, messageAtIndex: index) else { return }
-        guard let cell = msgListView.cellForItem(at: IndexPath(item: index, section: 0)) as? WJCADialogMessageCell else { return }
-        
-        updateContent(forCell: cell, with: msg, at: index)
+//        guard let msg = dataSource?.dialogView(self, messageAtIndex: index) else { return }
+//        guard let cell = msgListView.cellForItem(at: IndexPath(item: index, section: 0)) as? WJCADialogMessageCell else { return }
+//
+//        layout.updateMsgViewSize(<#T##size: CGSize##CGSize#>, at: <#T##Int#>, with: <#T##WJBubbleView.Position#>)
+//
+//
+//        updateContent(forCell: cell, with: msg, at: index)
     }
     
     private func updateContent(forCell cell: WJCADialogMessageCell, with msg: WJCADialogMessage, at index: Int) {
@@ -110,25 +115,14 @@ extension WJCADialogView: UICollectionViewDataSource {
             return cell
         }
         
-//        print("---- get cell at \(indexPath.row)")
+        if let cell = cell as? WJCADialogOptionsMessageCell {
+            cell.delegate = self
+        }
+        else if let cell = cell as? WJCADialogOptionListMessageCell {
+            cell.delegate = self
+        }
         
         updateContent(forCell: msgCell, with: msg, at: indexPath.row)
-//        msgCell.update(withMessage: msg)
-//        if layout.msgViewSize(at: indexPath.row) == nil {
-//            let fitSize = msgCell.sizeThatFits(layout.maxCellSize(forContentType: msg.contentType))
-//            layout.updateMsgViewSize(fitSize, at: indexPath.row, with: msg.position)
-//
-//            if indexPath.row == self.collectionView(collectionView, numberOfItemsInSection: 0) - 1 {
-//                let invalidationContext = UICollectionViewLayoutInvalidationContext.init()
-//                invalidationContext.invalidateItems(at: [indexPath])
-//                layout.invalidateLayout(with: invalidationContext)
-//            }
-//            else {
-//                layout.invalidateLayout()
-//            }
-//
-////            print("---- invalidateLayout")
-//        }
         
         return msgCell
     }
@@ -140,6 +134,18 @@ extension WJCADialogView: UICollectionViewDataSource {
 }
 
 extension WJCADialogView: UICollectionViewDelegate {
+    
+}
+
+extension WJCADialogView: WJCADialogOptionsMessageCellDelegate {
+    
+    func didSelectOption(in cell: WJCADialogMessageCell, at index: Int) {
+        guard let msgIndex = msgListView.indexPath(for: cell)?.item else {
+            return
+        }
+        
+        delegate?.didSelectOption(inMessage: msgIndex, at: index)
+    }
     
 }
 

@@ -10,5 +10,5 @@ import Foundation
 
 public protocol WJCADialogViewDelagate: AnyObject {
     
-    
+    func didSelectOption(inMessage msgIndex: Int, at optionIndex: Int)
 }

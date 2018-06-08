@@ -10,4 +10,6 @@ import Foundation
 
 public protocol WJCAViewControllerDelegate: AnyObject {
     
+    func didSelectOption(inMessage msgIndex: Int, at optionIndex: Int)
+    func needExcusIntent(_ intent: String)
 }

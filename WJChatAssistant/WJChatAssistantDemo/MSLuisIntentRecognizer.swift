@@ -17,6 +17,8 @@ class MSLuisIntentRecognizer: WJIntentRecognizerProtocol {
         
     }
     
+    
+    // FIXME: Use swift error handling
     func recognize(text: String, complation: @escaping (WJIntent?, NSError?) -> Void) {
         let appID = ""
         let rootURL = "https://westus.api.cognitive.microsoft.com/luis/v2.0/apps/\(appID)"
@@ -38,29 +40,28 @@ class MSLuisIntentRecognizer: WJIntentRecognizerProtocol {
             (data, response, error) in
             
             guard error == nil else {
-                complation(nil, nil)
+                complation(nil, NSError(domain: "Request task fail", code: 0, userInfo: nil))
                 return
             }
             
             guard let responseData = data else {
-                complation(nil, nil)
+                complation(nil, NSError(domain: "No response data", code: 0, userInfo: nil))
                 return
             }
             
             do {
                 guard let jsonData = try JSONSerialization.jsonObject(with: responseData, options: [])
                     as? [String: AnyObject] else {
-                    complation(nil, nil)
+                    complation(nil, NSError(domain: "Invalid response data", code: 0, userInfo: nil))
                     return
                 }
                 
                 print("data is: \(jsonData)")
+                complation(WJIntent.init(json: jsonData), nil)
             } catch {
-                complation(nil, nil)
+                complation(nil, NSError(domain: "Invalid response data", code: 0, userInfo: nil))
                 return
             }
-            
-            complation(nil, nil)
         }
         
         task.resume()

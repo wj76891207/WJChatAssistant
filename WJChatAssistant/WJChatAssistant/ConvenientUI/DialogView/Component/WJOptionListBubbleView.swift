@@ -37,6 +37,8 @@ class WJOptionListBubbleView: WJTextBubbleView, UITableViewDataSource, UITableVi
         }
     }
     
+    var optionSelectHandler: ((Int) -> Void)? = nil
+    
     override init(frame: CGRect, position: Position = .left) {
         super.init(frame: frame, position: position)
         borderWidth = 1
@@ -93,5 +95,7 @@ class WJOptionListBubbleView: WJTextBubbleView, UITableViewDataSource, UITableVi
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
+        
+        optionSelectHandler?(indexPath.row)
     }
 }
