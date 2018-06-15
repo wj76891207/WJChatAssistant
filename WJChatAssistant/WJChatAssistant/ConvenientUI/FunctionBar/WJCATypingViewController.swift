@@ -8,12 +8,21 @@
 
 import UIKit
 
+class TypingBar: UIView {
+    
+    
+    
+    
+}
+
 class WJCATypingViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        // Do any additional setup after loading the view.
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardFrameDidChange(_:)), name: NSNotification.Name.UIKeyboardDidChangeFrame, object: nil)
+        
+        view.endEditing(true)
     }
 
     override func didReceiveMemoryWarning() {
@@ -22,14 +31,10 @@ class WJCATypingViewController: UIViewController {
     }
     
 
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
+    @objc func keyboardFrameDidChange(_ noti: Notification) {
+        guard let userInfo = noti.userInfo else { return }
+        
+        userInfo[UIKeyboardFrameEndUserInfoKey]
     }
-    */
 
 }

@@ -66,3 +66,5 @@ fastlane/report.xml
 fastlane/Preview.html
 fastlane/screenshots/**/*.png
 fastlane/test_output
+libBaiduSpeechSDK.a
+bds_easr_input_model.dat

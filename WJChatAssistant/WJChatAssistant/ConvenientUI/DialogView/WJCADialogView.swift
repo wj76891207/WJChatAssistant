@@ -62,13 +62,15 @@ public class WJCADialogView: UIView {
     
     public func appendMsg() {
         let total = msgListView.numberOfItems(inSection: 0)
-        msgListView.insertItems(at: [IndexPath(row: total, section: 0)])
+        msgListView.insertItems(at: [IndexPath(item: total, section: 0)])
+        msgListView.scrollToItem(at: IndexPath(item: total, section: 0), at: .centeredVertically, animated: true)
     }
     
     public func updateMsg(at index: Int) {
         layout.reloadCells[IndexPath(item: index, section: 0)] = layout.msgViewFrames[index]
         layout.invalidateMsgViewSize(at: index)
         msgListView.reloadItems(at: [IndexPath(item: index, section: 0)])
+        msgListView.scrollToItem(at: IndexPath(item: index, section: 0), at: .centeredVertically, animated: true)
         
 //        guard let msg = dataSource?.dialogView(self, messageAtIndex: index) else { return }
 //        guard let cell = msgListView.cellForItem(at: IndexPath(item: index, section: 0)) as? WJCADialogMessageCell else { return }

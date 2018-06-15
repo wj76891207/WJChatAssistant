@@ -17,7 +17,7 @@ class WJCADialogViewLayout: UICollectionViewLayout {
     
     override func prepare() {
         super.prepare()
-        
+
         maxMsgWidth = ((dialogView?.bounds.width ?? UIScreen.main.bounds.width) - 3*marginToBorder).flat
         maxImageWidth = ((dialogView?.bounds.width ?? UIScreen.main.bounds.width)*0.6).flat
         maxImageHeight = ((dialogView?.bounds.height ?? UIScreen.main.bounds.height)*0.4).flat
@@ -35,8 +35,6 @@ class WJCADialogViewLayout: UICollectionViewLayout {
         let att = UICollectionViewLayoutAttributes(forCellWith: indexPath)
         
         att.frame = msgViewFrames[indexPath.row]
-        
-//        print("---- get cell layout at \(indexPath.row)")
         
         return att
     }
@@ -82,6 +80,8 @@ class WJCADialogViewLayout: UICollectionViewLayout {
     private var maxMsgWidth: CGFloat = 200
     private var maxImageWidth: CGFloat = 200
     private var maxImageHeight: CGFloat = 200
+    
+    private var cellTemplates: [WJCADialogMessage.ContentType: UICollectionViewCell] = [:]
 }
 
 // MARK: - Message Cell View Frame Management
@@ -119,11 +119,6 @@ extension WJCADialogViewLayout {
             for curIndex in index+1 ..< msgViewFrames.count {
                 msgViewFrames[curIndex] = msgViewFrames[curIndex].offsetBy(dx: 0, dy: offsetY)
             }
-        }
-        
-        if let frame = msgViewFrames.last, let offset = collectionView?.contentInset.bottom {
-//            collectionView?.scrollToItem(at: IndexPath.init(item: index, section: 0), at: .bottom, animated: true)
-            collectionView?.scrollRectToVisible(frame.offsetBy(dx: 0, dy: offset), animated: true)
         }
     }
     

@@ -8,16 +8,68 @@
 
 import Foundation
 
+class WJCATextInputView: UIView {
+    
+    fileprivate let textField = UITextField()
+    private let bgLayer = CALayer()
+    
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        
+        textField.font = UIFont.systemFont(ofSize: 16)
+        textField.returnKeyType = .send
+        
+        bgLayer.backgroundColor = UIColor(white: 0.95, alpha: 1.0).cgColor
+        
+        layer.addSublayer(bgLayer)
+        addSubview(textField)
+    }
+    
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        
+        textField.frame = bounds.insetBy(dx: 10, dy: 0)
+        bgLayer.frame = bounds.insetBy(dx: 0, dy: 6)
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    @discardableResult
+    override func becomeFirstResponder() -> Bool {
+        return textField.becomeFirstResponder()
+    }
+    
+    @discardableResult
+    override func resignFirstResponder() -> Bool {
+        return textField.resignFirstResponder()
+    }
+}
+
 public class WJCAFunctionBar: UIView {
+    
+    enum Status {
+        case waiting
+        case recording
+        case typing
+    }
+    private var status: Status = .waiting {
+        didSet {
+            updateView(true)
+        }
+    }
     
     public let suggestHeight: CGFloat = 70
     
     public weak var delegate: WJCAFunctionBarDelegate? = nil
     public weak var datasource: WJCAFunctionBarDatasource? = nil
     
-    private let recordBtnSize: CGFloat = 60
+    private let recordBtnSize: CGFloat = 50
     private let typingBtnSize: CGFloat = 40
     private func barShowHeight() -> CGFloat { return (bounds.height*2/3).flat }
+    
+    private var parentViewController: UIViewController?
     
     private lazy var typingBtn: UIButton = {
         let button = UIButton(frame: .zero)
@@ -70,32 +122,81 @@ public class WJCAFunctionBar: UIView {
         
         addSubview(typingBtn)
         addSubview(recordBtn)
+        addSubview(textInputView)
+
+        setupConstraints()
+        updateView(false)
     }
     
-    public override func layoutSubviews() {
-        super.layoutSubviews()
+    public override func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
+        let newPoint = self.convert(point, to: self)
+        if newPoint.y < recordBtnSize/2 && !between(newPoint.x, recordBtn.frame.minX, recordBtn.frame.maxX) {
+            return nil
+        }
+        return super.hitTest(point, with: event)
+    }
         
-        if typingBtn.superview == self {
-            typingBtn.frame = CGRect(x: 20, y: ((suggestHeight+recordBtnSize/2-typingBtnSize)/2).flat, width: typingBtnSize, height: typingBtnSize)
+    public override func didMoveToSuperview() {
+        super.didMoveToSuperview()
+
+        var curResponder: UIResponder = self
+        parentViewController = nil
+        while let nextResponder = curResponder.next {
+            if let viewController =  nextResponder as? UIViewController {
+                parentViewController = viewController
+                break
+            }
+            curResponder = nextResponder
         }
-        if recordBtn.superview == self {
-            recordBtn.frame = CGRect(x: ((bounds.width-recordBtnSize)/2).flat, y: 0, width: recordBtnSize, height: recordBtnSize)
         }
+    
+    private func setupConstraints() {
+        
+        let barActualCenterY = ((suggestHeight+recordBtnSize/2)/2).flat
+        
+        typingBtn.translatesAutoresizingMaskIntoConstraints = false
+        addConstraints([
+            NSLayoutConstraint(item: typingBtn, attribute: .left, relatedBy: .equal, toItem: self, attribute: .left, multiplier: 1.0, constant: 10),
+            NSLayoutConstraint(item: typingBtn, attribute: .centerY, relatedBy: .equal, toItem: self, attribute: .top, multiplier: 1.0, constant: barActualCenterY),
+            NSLayoutConstraint(item: typingBtn, attribute: .width, relatedBy: .equal, toItem: nil, attribute: .notAnAttribute, multiplier: 1.0, constant: typingBtnSize),
+            NSLayoutConstraint(item: typingBtn, attribute: .height, relatedBy: .equal, toItem: nil, attribute: .notAnAttribute, multiplier: 1.0, constant: typingBtnSize)
+            ])
+        
+        textInputView.translatesAutoresizingMaskIntoConstraints = false
+        addConstraints([
+            NSLayoutConstraint(item: textInputView, attribute: .left, relatedBy: .equal, toItem: typingBtn, attribute: .right, multiplier: 1.0, constant: 10),
+            NSLayoutConstraint(item: textInputView, attribute: .top, relatedBy: .equal, toItem: self, attribute: .top, multiplier: 1.0, constant: (recordBtnSize/2).flat),
+            NSLayoutConstraint(item: textInputView, attribute: .right, relatedBy: .equal, toItem: self, attribute: .right, multiplier: 1.0, constant: -10),
+            NSLayoutConstraint(item: textInputView, attribute: .bottom, relatedBy: .equal, toItem: self, attribute: .top, multiplier: 1.0, constant: suggestHeight)
+            ])
+        
+        recordBtn.translatesAutoresizingMaskIntoConstraints = false
+        addConstraints([
+            NSLayoutConstraint(item: recordBtn, attribute: .centerX, relatedBy: .equal, toItem: self, attribute: .centerX, multiplier: 1.0, constant: 0),
+            NSLayoutConstraint(item: recordBtn, attribute: .top, relatedBy: .equal, toItem: self, attribute: .top, multiplier: 1.0, constant: 0),
+            NSLayoutConstraint(item: recordBtn, attribute: .width, relatedBy: .equal, toItem: nil, attribute: .notAnAttribute, multiplier: 1.0, constant: recordBtnSize),
+            NSLayoutConstraint(item: recordBtn, attribute: .height, relatedBy: .equal, toItem: nil, attribute: .notAnAttribute, multiplier: 1.0, constant: recordBtnSize)
+            ])
     }
     
     public override func layoutSublayers(of layer: CALayer) {
         super.layoutSublayers(of: layer)
-        
+
         topBorderLine.frame = CGRect(x: 0, y: (recordBtnSize/2).flat, width: bounds.width, height: CGFloat.piexlOne)
         bgLayer.frame = CGRect(x: 0, y: topBorderLine.frame.maxY, width: bounds.width, height: bounds.height-topBorderLine.frame.maxY)
     }
     
     @objc private func didClickTypingBtn(_ sender: UIButton) {
-    
+        if status == .waiting {
+            delegate?.shouldStartTyping()
+        }
+        else {
+            delegate?.shouldEndTyping()
+        }
     }
     
     @objc private func didClickRecordBtn(_ sender: WJRecordButton) {
-        if sender.stauts == .waiting {
+        if status == .waiting {
             delegate?.shouldStartRecording()
         }
         else {
@@ -103,35 +204,70 @@ public class WJCAFunctionBar: UIView {
         }
     }
     
+    lazy var recordingController: WJCARecordingViewController = WJCARecordingViewController()
+    
+    private lazy var textInputView: WJCATextInputView = {
+        let inputView = WJCATextInputView()
+        inputView.textField.addTarget(self, action: #selector(confirmInputText(_:)), for: .editingDidEndOnExit)
+        return inputView
+    }()
+}
+
+extension WJCAFunctionBar {
+    
+    func updateView(_ animated: Bool) {
+        let changeBlock = { [weak self] in
+            guard let strongSelf = self else { return }
+            
+            strongSelf.textInputView.alpha = strongSelf.status == .typing ? 1.0 : 0.0
+            strongSelf.textInputView.isUserInteractionEnabled = strongSelf.status == .typing ? true : false
+            
+            strongSelf.topBorderLine.opacity = strongSelf.status == .recording ? 0.0 : 1.0
+            strongSelf.bgLayer.opacity = strongSelf.status == .recording ? 0.0 : 1.0
+            
+            strongSelf.recordBtn.isUserInteractionEnabled = strongSelf.status != .typing ? true : false
+            strongSelf.recordBtn.alpha = strongSelf.status != .typing ? 1.0 : 0.0
+            strongSelf.recordBtn.stauts = strongSelf.status == .recording ? .recording : .waiting
+            
+            strongSelf.typingBtn.alpha = strongSelf.status == .recording ? 0.0 : 1.0
+            strongSelf.typingBtn.isUserInteractionEnabled = strongSelf.status == .recording ? false : true
+            strongSelf.typingBtn.setImage(UIImage.init(named: strongSelf.status == .typing ? "_record" : "_keyboard",
+                                                       in: Bundle(for: WJCAFunctionBar.self),
+                                                       compatibleWith: nil), for: .normal)
+        }
+        
+        if animated {
+            UIView.animate(withDuration: 0.3) {
+                changeBlock()
+            }
+        } else {
+            changeBlock()
+        }
+    }
+}
+
+
+// MARK: - Deal Recording
+extension WJCAFunctionBar {
+    
     func startRecording() {
+        status = .recording
         showRecordingView()
-        // 由于按钮被移动到了新的view上，立刻加上的动画会被清除，所以暂时先延迟一点执行
-        // FIXME: 不能这么做，有bug
-        DispatchQueue.main.asyncAfter(deadline: .now()+0.02, execute: {
-            self.recordBtn.stauts = .recording
-        })
     }
     
     func stopRecording() {
-        recordBtn.stauts = .waiting
+        status = .waiting
         hideRecordingView()
     }
     
-    private var previousKeyWindow: UIWindow? = nil
-    lazy var recordingController: WJCARecordingViewController = WJCARecordingViewController()
     private func showRecordingView() {
-        
-        previousKeyWindow = UIApplication.shared.keyWindow
-        let recordBtnFrame = convert(recordBtn.frame, to: previousKeyWindow)
+        parentViewController?.view.insertSubview(recordingController.view, belowSubview: self)
         
         recordingController.cancelRecordHandler = { [weak self] in
             self?.delegate?.shouldCancelRecording()
         }
         recordingController.textContent = nil
-        contentWindow.rootViewController = recordingController
-        contentWindow.makeKeyAndVisible()
         
-        recordingController.addRecordButton(recordBtn, recordBtnFrame)
         recordBtn.isUserInteractionEnabled = false
         recordingController.show {
             self.recordBtn.isUserInteractionEnabled = true
@@ -139,18 +275,45 @@ public class WJCAFunctionBar: UIView {
     }
     
     private func hideRecordingView() {
-        let hideHandler = {
-            self.addSubview(self.recordBtn)
+        recordBtn.isUserInteractionEnabled = false
+        recordingController.hide { [weak self] in
+            self?.recordingController.view.removeFromSuperview()
+            self?.recordBtn.isUserInteractionEnabled = true
+        }
+    }
+    
+}
+
+// MARK: - Deal Typing
+extension WJCAFunctionBar {
             
-            self.contentWindow.isHidden = true
-            self.contentWindow.rootViewController = nil
-            self.previousKeyWindow = nil
+    func startTyping() {
+        status = .typing
+        showTypingView()
+    }
+    
+    func stopTyping() {
+        status = .waiting
+        hideTypingView()
         }
         
-        recordBtn.isUserInteractionEnabled = false
-        recordingController.hide {
-            hideHandler()
-            self.recordBtn.isUserInteractionEnabled = true
+    private func showTypingView() {
+        textInputView.becomeFirstResponder()
+    }
+    
+    private func hideTypingView() {
+        textInputView.resignFirstResponder()
+    }
+    
+    var gestureTargetViewController: UIViewController? {
+        return parentViewController
         }
+    
+    @objc private func confirmInputText(_ sender: UITextField) {
+        guard let content = sender.text else { return }
+        
+        delegate?.sendTypingContent(content)
+        sender.text = nil
+        status = .waiting
     }
 }

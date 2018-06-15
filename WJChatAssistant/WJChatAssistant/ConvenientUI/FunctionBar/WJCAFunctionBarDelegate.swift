@@ -17,5 +17,5 @@ public protocol WJCAFunctionBarDelegate: AnyObject {
     func shouldStartTyping()
     func shouldCancelTyping()
     func shouldEndTyping()
-    
+    func sendTypingContent(_ text: String)
 }

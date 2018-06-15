@@ -8,19 +8,20 @@
 
 import UIKit
 
-class WJRecordButton: UIControl {
+public class WJRecordButton: UIControl {
     
     private let head = CAShapeLayer()
     private let torus = CAShapeLayer()
     private let stem = CAShapeLayer()
     
-    enum Status {
+    public enum Status {
         case waiting
         case recording
         case processing
     }
-    var stauts: Status = .waiting {
+    public var stauts: Status = .waiting {
         didSet {
+            guard bounds != .zero else { return }
             self.updateShape(forStatus: self.stauts)
         }
     }
@@ -30,12 +31,12 @@ class WJRecordButton: UIControl {
         return layer
     }()
     
-    override init(frame: CGRect) {
+    @objc override init(frame: CGRect) {
         super.init(frame: frame)
         didInitialized()
     }
     
-    required init?(coder aDecoder: NSCoder) {
+    public required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
     }
     
@@ -55,7 +56,7 @@ class WJRecordButton: UIControl {
         tintColor = _blueColor
     }
     
-    override var isHighlighted: Bool {
+    override public var isHighlighted: Bool {
         didSet {
             
             let opacity: Float = isHighlighted ? 0.5 : 1.0
@@ -65,14 +66,14 @@ class WJRecordButton: UIControl {
         }
     }
     
-    override func layoutSublayers(of layer: CALayer) {
+    override public func layoutSublayers(of layer: CALayer) {
         super.layoutSublayers(of: layer)
         
         layer.cornerRadius = layer.bounds.width/2
         updateShape(forStatus: stauts)
     }
     
-    override func tintColorDidChange() {
+    override public func tintColorDidChange() {
         super.tintColorDidChange()
         
         layer.borderColor = tintColor.cgColor

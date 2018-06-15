@@ -126,7 +126,12 @@ open class WJCAViewController: UIViewController {
         return bar
     }()
     
+    private var funtionBarTopLayoutConstraint: NSLayoutConstraint!
+    
     private var speechRecognitionResult: WJSpeechRecognitionResult? = nil
+    
+    private var safeAreaBottomH: CGFloat = 0
+    
     
     // MARK: - Life cycle
     open override func viewDidLoad() {
@@ -153,33 +158,73 @@ open class WJCAViewController: UIViewController {
         else {
             constraintTarget = view
         }
+        funtionBarTopLayoutConstraint = NSLayoutConstraint(item: funtionBar, attribute: .top, relatedBy: .equal, toItem: constraintTarget, attribute: .bottom, multiplier: 1.0, constant: -funtionBar.suggestHeight)
         view.addConstraint(NSLayoutConstraint(item: funtionBar, attribute: .left, relatedBy: .equal, toItem: view, attribute: .left, multiplier: 1.0, constant: 0.0))
         view.addConstraint(NSLayoutConstraint(item: funtionBar, attribute: .right, relatedBy: .equal, toItem: view, attribute: .right, multiplier: 1.0, constant: 0.0))
-        view.addConstraint(NSLayoutConstraint(item: funtionBar, attribute: .top, relatedBy: .equal, toItem: constraintTarget, attribute: .bottom, multiplier: 1.0, constant: -funtionBar.suggestHeight))
+        view.addConstraint(funtionBarTopLayoutConstraint)
         view.addConstraint(NSLayoutConstraint(item: funtionBar, attribute: .bottom, relatedBy: .equal, toItem: view, attribute: .bottom, multiplier: 1.0, constant: 0.0))
         
-        var contentInset = UIEdgeInsets(top: 0, left: 0, bottom: funtionBar.suggestHeight, right: 0)
+        dialogView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: funtionBar.suggestHeight, right: 0)
+    }
+    
+    open override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        
         if #available(iOS 11.0, *) {
-            contentInset.bottom += view.safeAreaInsets.bottom
+            safeAreaBottomH = view.safeAreaInsets.bottom
         }
-        dialogView.contentInset = contentInset
+    }
+    
+    open override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        WJCAKeyboardManager.share.add(observer: self)
+    }
+    
+    open override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        
+        WJCAKeyboardManager.share.remove(observer: self)
+    }
+}
+
+// MARK: - WJCAKeyboardManagerObserver
+extension WJCAViewController: WJCAKeyboardManagerObserver {
+    
+    var gestureTargetViewController: UIViewController? {
+        return self
+    }
+    
+    func keyboardWillShow(_ info: WJCAKeyboardManagerObserver.KeyboardInfo) {
+        dialogView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: funtionBar.suggestHeight + info.end.height - safeAreaBottomH, right: 0)
+        
+        funtionBarTopLayoutConstraint.constant = -funtionBar.suggestHeight-info.end.height+safeAreaBottomH
+        UIView.animate(withDuration: info.duration, delay: 0, options: info.curve, animations: {
+            self.view.layoutIfNeeded()
+        }, completion: nil)
+    }
+    
+    func keyboardWillHide(_ info: WJCAKeyboardManagerObserver.KeyboardInfo) {
+        dialogView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: funtionBar.suggestHeight, right: 0)
+        
+        funtionBarTopLayoutConstraint.constant = -funtionBar.suggestHeight
+        UIView.animate(withDuration: info.duration, delay: 0, options: info.curve, animations: {
+            self.view.layoutIfNeeded()
+        }, completion: nil)
     }
 }
 
 // MARK: - WJChatAssistantDelegate
 extension WJCAViewController: WJChatAssistantDelegate {
     
-    public func wjChatAssistantSpeechRecognizeComplate(_ isSuceessful: Bool, _ error: NSError?) {
-        funtionBar.stopRecording()
+    func handleMessage(_ text: String) {
         
-        if let speechRecognitionResult = speechRecognitionResult, isSuceessful {
             var msg = WJCADialogMessage()
-            msg.content = speechRecognitionResult.bestTranscription
+        msg.content = text
             msg.speaker = .user
             messages.append(msg)
-            
+
             dialogView.appendMsg()
-            
             
             var msg1 = WJCADialogMessage()
             msg1.content = WJCADialogOptionMessageContent()
@@ -189,8 +234,7 @@ extension WJCAViewController: WJChatAssistantDelegate {
             messages.append(msg1)
             dialogView.appendMsg()
             
-            chatAssistant.intentRecognizer?.recognize(text: speechRecognitionResult.bestTranscription) {
-                (intent, error) in
+        chatAssistant.intentRecognizer?.recognize(text: text, complation: { (intent, error) in
                 guard let intent = intent else { return }
                 
                 let index = self.messages.count-1
@@ -200,6 +244,9 @@ extension WJCAViewController: WJChatAssistantDelegate {
                 if isIntentClear {
                     msg.contentType = .options
                     msg.content = WJCADialogOptionMessageContent(title: "👌，没问题。", options: [intent.topScoringIntent.intent])
+                DispatchQueue.main.asyncAfter(deadline: .now() + 1, execute: {
+                    self.delegate?.needExcusIntent(intent.topScoringIntent.intent)
+                })
                 }
                 else {
                     msg.contentType = .optionsList
@@ -213,7 +260,14 @@ extension WJCAViewController: WJChatAssistantDelegate {
                 DispatchQueue.main.async {
                 self.dialogView.updateMsg(at: index)
                 }
+        })
             }
+    
+    public func wjChatAssistantSpeechRecognizeComplate(_ isSuceessful: Bool, _ error: NSError?) {
+        funtionBar.stopRecording()
+        
+        if let speechRecognitionResult = speechRecognitionResult, isSuceessful {
+            handleMessage(speechRecognitionResult.bestTranscription)
         }
     }
     
@@ -286,18 +340,20 @@ extension WJCAViewController: WJCAFunctionBarDelegate {
     }
     
     public func shouldStartTyping() {
-        
+        funtionBar.startTyping()
     }
     
     public func shouldCancelTyping() {
-        
+        funtionBar.stopTyping()
     }
     
     public func shouldEndTyping() {
-        
+        funtionBar.stopTyping()
     }
-    
-    
+        
+    public func sendTypingContent(_ text: String) {
+        handleMessage(text)
+    }
 }
 
 func isSimulator() -> Bool {

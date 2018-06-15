@@ -47,7 +47,7 @@ class WJRecordingView: UIView {
     
     var closeHandler: (() -> Void)? = nil
     
-    var tips: String? = nil {
+    var tips: String? = "查看下属工作轨迹" {
         didSet {
             updateTipsView()
         }
@@ -88,7 +88,7 @@ class WJRecordingView: UIView {
     private func updateTipsView() {
         tipsTitleLabel.isHidden = content != nil
         if content == nil {
-            tipsTitleLabel.text = tips
+            contentLabel.text = tips
         }
     }
     
